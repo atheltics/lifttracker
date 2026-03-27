@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -22,250 +23,250 @@
   --espresso:   #3D2E24;
   --ink:        #241A14;
 
-  --accent:     #B87333;  /* copper */
-  --accent-light: #D4956A;
-  --accent-pale:  #F0DCC8;
+–accent:     #B87333;  /* copper */
+–accent-light: #D4956A;
+–accent-pale:  #F0DCC8;
 
-  --success:    #5A8A5A;
-  --success-bg: #EAF2EA;
+–success:    #5A8A5A;
+–success-bg: #EAF2EA;
 
-  --bg:         #F5F0E8;
-  --surface:    #FFFFFF;
-  --surface2:   #FAF7F2;
-  --border:     rgba(107,94,82,.12);
-  --border-mid: rgba(107,94,82,.20);
+–bg:         #F5F0E8;
+–surface:    #FFFFFF;
+–surface2:   #FAF7F2;
+–border:     rgba(107,94,82,.12);
+–border-mid: rgba(107,94,82,.20);
 
-  --text-1: #241A14;
-  --text-2: #6B5E52;
-  --text-3: #9A8E80;
+–text-1: #241A14;
+–text-2: #6B5E52;
+–text-3: #9A8E80;
 
-  --font-display: 'Playfair Display', Georgia, serif;
-  --font-body:    'Nunito', sans-serif;
-  --font-mono:    'Nunito Mono', monospace;
+–font-display: ‘Playfair Display’, Georgia, serif;
+–font-body:    ‘Nunito’, sans-serif;
+–font-mono:    ‘Nunito Mono’, monospace;
 
-  --tab-h: 68px;
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
-  --radius: 16px;
-  --radius-sm: 10px;
+–tab-h: 68px;
+–safe-bottom: env(safe-area-inset-bottom, 0px);
+–radius: 16px;
+–radius-sm: 10px;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
-  height: 100%;
-  overflow: hidden;
-  background: var(--bg);
-  color: var(--text-1);
-  font-family: var(--font-body);
-  -webkit-font-smoothing: antialiased;
+height: 100%;
+overflow: hidden;
+background: var(–bg);
+color: var(–text-1);
+font-family: var(–font-body);
+-webkit-font-smoothing: antialiased;
 }
 
 #app {
-  display: flex;
-  flex-direction: column;
-  height: 100dvh;
-  max-width: 430px;
-  margin: 0 auto;
-  position: relative;
-  overflow: hidden;
+display: flex;
+flex-direction: column;
+height: 100dvh;
+max-width: 430px;
+margin: 0 auto;
+position: relative;
+overflow: hidden;
 }
 
 .screen { display: none; flex-direction: column; flex: 1; overflow: hidden; }
 .screen.active { display: flex; }
 
 .scroll-area {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding-bottom: calc(var(--tab-h) + var(--safe-bottom) + 32px);
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+flex: 1;
+overflow-y: auto;
+overflow-x: hidden;
+padding-bottom: calc(var(–tab-h) + var(–safe-bottom) + 32px);
+-webkit-overflow-scrolling: touch;
+scrollbar-width: none;
 }
 .scroll-area::-webkit-scrollbar { display: none; }
 
 /* ── NAV ── */
 nav {
-  position: fixed;
-  bottom: 0; left: 50%;
-  transform: translateX(-50%);
-  width: 100%; max-width: 430px;
-  height: calc(var(--tab-h) + var(--safe-bottom));
-  padding-bottom: var(--safe-bottom);
-  background: var(--surface);
-  border-top: 1px solid var(--border-mid);
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-around;
-  z-index: 100;
+position: fixed;
+bottom: 0; left: 50%;
+transform: translateX(-50%);
+width: 100%; max-width: 430px;
+height: calc(var(–tab-h) + var(–safe-bottom));
+padding-bottom: var(–safe-bottom);
+background: var(–surface);
+border-top: 1px solid var(–border-mid);
+display: flex;
+align-items: flex-start;
+justify-content: space-around;
+z-index: 100;
 }
 .nav-btn {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  padding-top: 10px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--text-3);
-  transition: color .2s;
-  font-family: var(--font-body);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: .4px;
-  text-transform: uppercase;
+flex: 1;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 3px;
+padding-top: 10px;
+background: none;
+border: none;
+cursor: pointer;
+color: var(–text-3);
+transition: color .2s;
+font-family: var(–font-body);
+font-size: 10px;
+font-weight: 600;
+letter-spacing: .4px;
+text-transform: uppercase;
 }
-.nav-btn.active { color: var(--accent); }
+.nav-btn.active { color: var(–accent); }
 .nav-btn svg { width: 22px; height: 22px; stroke-width: 1.8; }
 .nav-indicator {
-  width: 18px; height: 2px;
-  border-radius: 99px;
-  background: var(--accent);
-  opacity: 0;
-  transition: opacity .2s;
-  margin-top: 1px;
+width: 18px; height: 2px;
+border-radius: 99px;
+background: var(–accent);
+opacity: 0;
+transition: opacity .2s;
+margin-top: 1px;
 }
 .nav-btn.active .nav-indicator { opacity: 1; }
 
 /* ── PAGE HEADER ── */
 .page-header {
-  padding: 54px 22px 16px;
+padding: 54px 22px 16px;
 }
 .page-header .eyebrow {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 2px;
+font-size: 11px;
+font-weight: 600;
+letter-spacing: 2px;
+text-transform: uppercase;
+color: var(–accent);
+margin-bottom: 2px;
 }
 .page-header h1 {
-  font-family: var(--font-display);
-  font-size: 38px;
-  font-weight: 700;
-  line-height: 1.05;
-  color: var(--espresso);
+font-family: var(–font-display);
+font-size: 38px;
+font-weight: 700;
+line-height: 1.05;
+color: var(–espresso);
 }
 
 /* ── TODAY HERO CARD ── */
 .hero-card {
-  margin: 0 16px 20px;
-  background: var(--espresso);
-  border-radius: 20px;
-  padding: 22px 22px 18px;
-  position: relative;
-  overflow: hidden;
+margin: 0 16px 20px;
+background: var(–espresso);
+border-radius: 20px;
+padding: 22px 22px 18px;
+position: relative;
+overflow: hidden;
 }
 .hero-card::after {
-  content: '';
-  position: absolute;
-  top: -30px; right: -30px;
-  width: 140px; height: 140px;
-  border-radius: 50%;
-  background: rgba(184,115,51,.18);
-  pointer-events: none;
+content: ‘’;
+position: absolute;
+top: -30px; right: -30px;
+width: 140px; height: 140px;
+border-radius: 50%;
+background: rgba(184,115,51,.18);
+pointer-events: none;
 }
 .hero-day-name {
-  font-family: var(--font-display);
-  font-size: 36px;
-  font-weight: 700;
-  color: var(--accent-light);
-  line-height: 1;
-  margin-bottom: 2px;
+font-family: var(–font-display);
+font-size: 36px;
+font-weight: 700;
+color: var(–accent-light);
+line-height: 1;
+margin-bottom: 2px;
 }
 .hero-category {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,.55);
-  margin-bottom: 2px;
+font-size: 12px;
+font-weight: 600;
+letter-spacing: 1.5px;
+text-transform: uppercase;
+color: rgba(255,255,255,.55);
+margin-bottom: 2px;
 }
 .hero-date {
-  font-size: 13px;
-  color: rgba(255,255,255,.38);
+font-size: 13px;
+color: rgba(255,255,255,.38);
 }
 .hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 14px;
-  background: rgba(184,115,51,.22);
-  border: 1px solid rgba(184,115,51,.45);
-  border-radius: 99px;
-  padding: 5px 13px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-  color: var(--accent-light);
+display: inline-flex;
+align-items: center;
+gap: 6px;
+margin-top: 14px;
+background: rgba(184,115,51,.22);
+border: 1px solid rgba(184,115,51,.45);
+border-radius: 99px;
+padding: 5px 13px;
+font-size: 11px;
+font-weight: 700;
+letter-spacing: 1.2px;
+text-transform: uppercase;
+color: var(–accent-light);
 }
 .hero-badge-dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: var(--accent-light);
-  animation: pulse 2s ease-in-out infinite;
+width: 7px; height: 7px;
+border-radius: 50%;
+background: var(–accent-light);
+animation: pulse 2s ease-in-out infinite;
 }
 @keyframes pulse {
-  0%,100% { opacity:1; transform:scale(1); }
-  50% { opacity:.35; transform:scale(.75); }
+0%,100% { opacity:1; transform:scale(1); }
+50% { opacity:.35; transform:scale(.75); }
 }
 
 /* progress bar */
 .hero-progress { margin-top: 14px; }
 .hero-prog-bar {
-  height: 3px;
-  background: rgba(255,255,255,.12);
-  border-radius: 99px;
-  overflow: hidden;
-  margin-bottom: 5px;
+height: 3px;
+background: rgba(255,255,255,.12);
+border-radius: 99px;
+overflow: hidden;
+margin-bottom: 5px;
 }
 .hero-prog-fill {
-  height: 100%;
-  background: var(--accent-light);
-  border-radius: 99px;
-  transition: width .5s ease;
+height: 100%;
+background: var(–accent-light);
+border-radius: 99px;
+transition: width .5s ease;
 }
 .hero-prog-label {
-  font-size: 11px;
-  color: rgba(255,255,255,.4);
-  font-family: var(--font-mono);
+font-size: 11px;
+color: rgba(255,255,255,.4);
+font-family: var(–font-mono);
 }
 
 /* ── SECTION LABEL ── */
 .section-label {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1.8px;
-  text-transform: uppercase;
-  color: var(--text-3);
-  padding: 0 22px;
-  margin-bottom: 10px;
+font-size: 11px;
+font-weight: 700;
+letter-spacing: 1.8px;
+text-transform: uppercase;
+color: var(–text-3);
+padding: 0 22px;
+margin-bottom: 10px;
 }
 
 /* ── EXERCISE CARDS ── */
 .exercise-list {
-  padding: 0 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+padding: 0 16px;
+display: flex;
+flex-direction: column;
+gap: 8px;
 }
 
 .ex-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  transition: box-shadow .2s;
-  animation: fadeUp .35s ease both;
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius);
+overflow: hidden;
+transition: box-shadow .2s;
+animation: fadeUp .35s ease both;
 }
 .ex-card.open { box-shadow: 0 4px 20px rgba(61,46,36,.10); }
 
 @keyframes fadeUp {
-  from { opacity:0; transform:translateY(10px); }
-  to   { opacity:1; transform:translateY(0); }
+from { opacity:0; transform:translateY(10px); }
+to   { opacity:1; transform:translateY(0); }
 }
 .ex-card:nth-child(1) { animation-delay:.02s }
 .ex-card:nth-child(2) { animation-delay:.06s }
@@ -277,455 +278,511 @@ nav {
 .ex-card:nth-child(8) { animation-delay:.30s }
 
 /* type accent bar */
-.ex-card[data-type="strength"]   { border-left: 3px solid var(--accent); }
-.ex-card[data-type="power"]      { border-left: 3px solid #7BA7BC; }
-.ex-card[data-type="plyo"]       { border-left: 3px solid #C4A35A; }
-.ex-card[data-type="speed"]      { border-left: 3px solid #B07090; }
-.ex-card[data-type="unilateral"] { border-left: 3px solid #7A9E7E; }
-.ex-card[data-type="injury"]     { border-left: 3px solid #8AABE0; }
-.ex-card[data-type="core"]       { border-left: 3px solid #A8A090; }
+.ex-card[data-type=“strength”]   { border-left: 3px solid var(–accent); }
+.ex-card[data-type=“power”]      { border-left: 3px solid #7BA7BC; }
+.ex-card[data-type=“plyo”]       { border-left: 3px solid #C4A35A; }
+.ex-card[data-type=“speed”]      { border-left: 3px solid #B07090; }
+.ex-card[data-type=“unilateral”] { border-left: 3px solid #7A9E7E; }
+.ex-card[data-type=“injury”]     { border-left: 3px solid #8AABE0; }
+.ex-card[data-type=“core”]       { border-left: 3px solid #A8A090; }
 
 /* ── EXERCISE HEADER ROW (tap to expand) ── */
 .ex-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 14px 14px 16px;
-  cursor: pointer;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
+display: flex;
+align-items: center;
+gap: 12px;
+padding: 14px 14px 14px 16px;
+cursor: pointer;
+user-select: none;
+-webkit-tap-highlight-color: transparent;
 }
 .ex-num {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 500;
-  color: var(--accent);
-  background: var(--accent-pale);
-  border-radius: 6px;
-  padding: 3px 6px;
-  min-width: 24px;
-  text-align: center;
-  flex-shrink: 0;
+font-family: var(–font-mono);
+font-size: 10px;
+font-weight: 500;
+color: var(–accent);
+background: var(–accent-pale);
+border-radius: 6px;
+padding: 3px 6px;
+min-width: 24px;
+text-align: center;
+flex-shrink: 0;
 }
 .ex-main { flex: 1; min-width: 0; }
 .ex-name {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-1);
-  line-height: 1.2;
+font-size: 15px;
+font-weight: 600;
+color: var(–text-1);
+line-height: 1.2;
 }
 .ex-card.done .ex-name {
-  text-decoration: line-through;
-  color: var(--text-3);
+text-decoration: line-through;
+color: var(–text-3);
 }
 .ex-sub {
-  font-size: 12px;
-  color: var(--text-3);
-  margin-top: 2px;
+font-size: 12px;
+color: var(–text-3);
+margin-top: 2px;
 }
 .ex-right {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
+display: flex;
+align-items: center;
+gap: 8px;
+flex-shrink: 0;
 }
 .ex-last-weight {
-  text-align: right;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--text-3);
+text-align: right;
+font-family: var(–font-mono);
+font-size: 11px;
+color: var(–text-3);
 }
 .ex-last-weight strong {
-  display: block;
-  font-size: 13px;
-  color: var(--accent);
-  font-weight: 600;
+display: block;
+font-size: 13px;
+color: var(–accent);
+font-weight: 600;
 }
 
 /* checkmark */
 .ex-check {
-  width: 26px; height: 26px;
-  border-radius: 50%;
-  border: 2px solid var(--border-mid);
-  background: var(--surface2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all .2s cubic-bezier(.34,1.56,.64,1);
-  flex-shrink: 0;
+width: 26px; height: 26px;
+border-radius: 50%;
+border: 2px solid var(–border-mid);
+background: var(–surface2);
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+transition: all .2s cubic-bezier(.34,1.56,.64,1);
+flex-shrink: 0;
 }
 .ex-check:active { transform: scale(.85); }
 .ex-check svg { width: 13px; height: 13px; opacity: 0; transition: opacity .15s; stroke: white; stroke-width: 2.5; }
 .ex-card.done .ex-check {
-  background: var(--success);
-  border-color: var(--success);
+background: var(–success);
+border-color: var(–success);
 }
 .ex-card.done .ex-check svg { opacity: 1; }
 .ex-card.done { opacity: .7; }
 
 /* chevron */
 .ex-chevron {
-  width: 16px; height: 16px;
-  color: var(--text-3);
-  transition: transform .25s ease;
-  flex-shrink: 0;
+width: 16px; height: 16px;
+color: var(–text-3);
+transition: transform .25s ease;
+flex-shrink: 0;
 }
 .ex-card.open .ex-chevron { transform: rotate(180deg); }
 
 /* ── DROPDOWN BODY ── */
 .ex-body {
-  display: none;
-  border-top: 1px solid var(--border);
+display: none;
+border-top: 1px solid var(–border);
 }
 .ex-card.open .ex-body { display: block; }
 
 /* how-to section */
 .ex-howto {
-  padding: 14px 16px;
-  background: var(--surface2);
-  border-bottom: 1px solid var(--border);
+padding: 14px 16px;
+background: var(–surface2);
+border-bottom: 1px solid var(–border);
 }
 .ex-howto-title {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 8px;
+font-size: 10px;
+font-weight: 700;
+letter-spacing: 1.5px;
+text-transform: uppercase;
+color: var(–accent);
+margin-bottom: 8px;
 }
 .ex-howto p {
-  font-size: 13px;
-  color: var(--text-2);
-  line-height: 1.65;
+font-size: 13px;
+color: var(–text-2);
+line-height: 1.65;
 }
 .ex-note-tip {
-  display: flex;
-  align-items: flex-start;
-  gap: 7px;
-  margin-top: 8px;
-  background: var(--accent-pale);
-  border-radius: 8px;
-  padding: 8px 10px;
-  font-size: 12px;
-  color: var(--taupe);
-  line-height: 1.5;
+display: flex;
+align-items: flex-start;
+gap: 7px;
+margin-top: 8px;
+background: var(–accent-pale);
+border-radius: 8px;
+padding: 8px 10px;
+font-size: 12px;
+color: var(–taupe);
+line-height: 1.5;
 }
-.ex-note-tip::before { content: '💡'; flex-shrink: 0; font-size: 13px; }
+.ex-note-tip::before { content: ‘💡’; flex-shrink: 0; font-size: 13px; }
 
 /* log section */
 .ex-log {
-  padding: 14px 16px 16px;
+padding: 14px 16px 16px;
 }
 .ex-log-title {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--text-3);
-  margin-bottom: 10px;
+font-size: 10px;
+font-weight: 700;
+letter-spacing: 1.5px;
+text-transform: uppercase;
+color: var(–text-3);
+margin-bottom: 10px;
 }
 .log-set-row {
-  display: grid;
-  grid-template-columns: 28px 1fr 1fr;
-  gap: 6px;
-  align-items: center;
-  margin-bottom: 6px;
+display: grid;
+grid-template-columns: 28px 1fr 1fr;
+gap: 6px;
+align-items: center;
+margin-bottom: 6px;
 }
 .set-label {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-3);
-  text-align: center;
+font-size: 11px;
+font-weight: 600;
+color: var(–text-3);
+text-align: center;
 }
 .set-input {
-  background: var(--surface2);
-  border: 1px solid var(--border-mid);
-  border-radius: 8px;
-  padding: 9px 8px;
-  font-size: 14px;
-  font-family: var(--font-mono);
-  color: var(--text-1);
-  text-align: center;
-  width: 100%;
-  -webkit-appearance: none;
-  transition: border-color .15s;
+background: var(–surface2);
+border: 1px solid var(–border-mid);
+border-radius: 8px;
+padding: 9px 8px;
+font-size: 14px;
+font-family: var(–font-mono);
+color: var(–text-1);
+text-align: center;
+width: 100%;
+-webkit-appearance: none;
+transition: border-color .15s;
 }
-.set-input::placeholder { color: var(--text-3); }
-.set-input:focus { outline: none; border-color: var(--accent); background: white; }
+.set-input::placeholder { color: var(–text-3); }
+.set-input:focus { outline: none; border-color: var(–accent); background: white; }
 .set-input-header {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--text-3);
-  text-align: center;
-  margin-bottom: 4px;
+font-size: 9px;
+font-weight: 700;
+letter-spacing: 1px;
+text-transform: uppercase;
+color: var(–text-3);
+text-align: center;
+margin-bottom: 4px;
 }
 .log-headers {
-  display: grid;
-  grid-template-columns: 28px 1fr 1fr;
-  gap: 6px;
-  margin-bottom: 4px;
+display: grid;
+grid-template-columns: 28px 1fr 1fr;
+gap: 6px;
+margin-bottom: 4px;
 }
 .add-set-btn {
-  background: none;
-  border: 1px dashed var(--border-mid);
-  border-radius: 8px;
-  padding: 8px;
-  width: 100%;
-  color: var(--text-3);
-  font-size: 12px;
-  font-family: var(--font-body);
-  cursor: pointer;
-  margin-top: 4px;
-  transition: all .15s;
+background: none;
+border: 1px dashed var(–border-mid);
+border-radius: 8px;
+padding: 8px;
+width: 100%;
+color: var(–text-3);
+font-size: 12px;
+font-family: var(–font-body);
+cursor: pointer;
+margin-top: 4px;
+transition: all .15s;
 }
-.add-set-btn:active { background: var(--surface2); }
+.add-set-btn:active { background: var(–surface2); }
 
 .proj-line {
-  margin-top: 10px;
-  padding: 8px 10px;
-  background: var(--surface2);
-  border-radius: 8px;
-  font-size: 12px;
-  color: var(--text-2);
-  display: flex;
-  align-items: center;
-  gap: 6px;
+margin-top: 10px;
+padding: 8px 10px;
+background: var(–surface2);
+border-radius: 8px;
+font-size: 12px;
+color: var(–text-2);
+display: flex;
+align-items: center;
+gap: 6px;
 }
-.proj-line .proj-arrow { color: var(--accent); font-weight: 700; }
+.proj-line .proj-arrow { color: var(–accent); font-weight: 700; }
 .proj-ready {
-  background: var(--success-bg);
-  color: var(--success);
+background: var(–success-bg);
+color: var(–success);
 }
 
 /* ── REST DAY ── */
 .rest-card {
-  margin: 0 16px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 40px 24px;
-  text-align: center;
+margin: 0 16px;
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 20px;
+padding: 40px 24px;
+text-align: center;
 }
 .rest-icon { font-size: 44px; margin-bottom: 12px; }
 .rest-card h2 {
-  font-family: var(--font-display);
-  font-size: 30px;
-  color: var(--espresso);
-  margin-bottom: 8px;
+font-family: var(–font-display);
+font-size: 30px;
+color: var(–espresso);
+margin-bottom: 8px;
 }
-.rest-card p { color: var(--text-2); font-size: 14px; line-height: 1.6; }
+.rest-card p { color: var(–text-2); font-size: 14px; line-height: 1.6; }
 
 /* ── CALENDAR ── */
 .cal-month-nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 22px;
-  margin-bottom: 12px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 0 22px;
+margin-bottom: 12px;
 }
 .cal-month-nav h2 {
-  font-family: var(--font-display);
-  font-size: 24px;
-  color: var(--espresso);
+font-family: var(–font-display);
+font-size: 24px;
+color: var(–espresso);
 }
 .month-btn {
-  background: var(--surface);
-  border: 1px solid var(--border-mid);
-  border-radius: 10px;
-  width: 34px; height: 34px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--text-1);
-  font-size: 18px;
-  transition: background .15s;
+background: var(–surface);
+border: 1px solid var(–border-mid);
+border-radius: 10px;
+width: 34px; height: 34px;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+color: var(–text-1);
+font-size: 18px;
+transition: background .15s;
 }
-.month-btn:active { background: var(--parchment); }
+.month-btn:active { background: var(–parchment); }
 
 .cal-grid {
-  display: grid;
-  grid-template-columns: repeat(7,1fr);
-  gap: 2px;
-  padding: 0 16px;
-  margin-bottom: 16px;
+display: grid;
+grid-template-columns: repeat(7,1fr);
+gap: 2px;
+padding: 0 16px;
+margin-bottom: 16px;
 }
 .cal-day-header {
-  text-align: center;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: var(--text-3);
-  text-transform: uppercase;
-  padding: 8px 0;
+text-align: center;
+font-size: 10px;
+font-weight: 700;
+letter-spacing: 1px;
+color: var(–text-3);
+text-transform: uppercase;
+padding: 8px 0;
 }
 .cal-cell {
-  aspect-ratio: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background .15s;
+aspect-ratio: 1;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 3px;
+border-radius: 10px;
+cursor: pointer;
+transition: background .15s;
 }
-.cal-cell:hover { background: var(--parchment); }
-.cal-cell.today { background: var(--espresso); }
+.cal-cell:hover { background: var(–parchment); }
+.cal-cell.today { background: var(–espresso); }
 .cal-cell.today .cal-num { color: white; font-weight: 700; }
-.cal-cell.selected { background: var(--accent); }
+.cal-cell.selected { background: var(–accent); }
 .cal-cell.selected .cal-num { color: white; font-weight: 700; }
-.cal-num { font-size: 13px; color: var(--text-1); }
-.cal-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
-.cal-cell.today .cal-dot { background: var(--accent-light); }
+.cal-num { font-size: 13px; color: var(–text-1); }
+.cal-dot { width: 4px; height: 4px; border-radius: 50%; background: var(–accent); }
+.cal-cell.today .cal-dot { background: var(–accent-light); }
 .cal-cell.selected .cal-dot { background: white; }
-.cal-cell.future .cal-num { color: var(--text-3); }
+.cal-cell.future .cal-num { color: var(–text-3); }
 .cal-cell.empty { pointer-events: none; }
 
 .cal-detail {
-  margin: 0 16px 16px;
-  background: var(--surface);
-  border: 1px solid var(--border-mid);
-  border-radius: var(--radius);
-  padding: 18px;
-  animation: fadeIn .2s ease;
+margin: 0 16px 16px;
+background: var(–surface);
+border: 1px solid var(–border-mid);
+border-radius: var(–radius);
+padding: 18px;
+animation: fadeIn .2s ease;
 }
 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 .cal-detail h3 {
-  font-family: var(--font-display);
-  font-size: 24px;
-  color: var(--espresso);
-  margin-bottom: 4px;
+font-family: var(–font-display);
+font-size: 24px;
+color: var(–espresso);
+margin-bottom: 4px;
 }
 .cal-tag {
-  display: inline-block;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-  background: var(--accent-pale);
-  color: var(--accent);
-  border-radius: 99px;
-  padding: 4px 12px;
-  margin-bottom: 14px;
+display: inline-block;
+font-size: 10px;
+font-weight: 700;
+letter-spacing: 1.2px;
+text-transform: uppercase;
+background: var(–accent-pale);
+color: var(–accent);
+border-radius: 99px;
+padding: 4px 12px;
+margin-bottom: 14px;
 }
 .lift-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 9px 0;
-  border-bottom: 1px solid var(--border);
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 9px 0;
+border-bottom: 1px solid var(–border);
 }
 .lift-row:last-child { border-bottom: none; }
-.lift-name { font-size: 14px; color: var(--text-1); }
-.lift-val { font-family: var(--font-mono); font-size: 13px; color: var(--accent); font-weight: 600; }
-.lift-proj { font-size: 11px; color: var(--text-3); text-align: right; }
+.lift-name { font-size: 14px; color: var(–text-1); }
+.lift-val { font-family: var(–font-mono); font-size: 13px; color: var(–accent); font-weight: 600; }
+.lift-proj { font-size: 11px; color: var(–text-3); text-align: right; }
 
 /* ── SETTINGS ── */
 .settings-section {
-  margin: 0 16px 14px;
-  background: var(--surface);
-  border: 1px solid var(--border-mid);
-  border-radius: var(--radius);
-  overflow: hidden;
+margin: 0 16px 14px;
+background: var(–surface);
+border: 1px solid var(–border-mid);
+border-radius: var(–radius);
+overflow: hidden;
 }
 .settings-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 15px 16px;
-  border-bottom: 1px solid var(--border);
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 15px 16px;
+border-bottom: 1px solid var(–border);
 }
 .settings-row:last-child { border-bottom: none; }
-.settings-label { font-size: 15px; color: var(--text-1); font-weight: 500; }
-.settings-sub { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+.settings-label { font-size: 15px; color: var(–text-1); font-weight: 500; }
+.settings-sub { font-size: 12px; color: var(–text-3); margin-top: 2px; }
 .time-input {
-  background: var(--surface2);
-  border: 1px solid var(--border-mid);
-  border-radius: 8px;
-  padding: 7px 11px;
-  font-size: 15px;
-  color: var(--text-1);
-  font-family: var(--font-mono);
+background: var(–surface2);
+border: 1px solid var(–border-mid);
+border-radius: 8px;
+padding: 7px 11px;
+font-size: 15px;
+color: var(–text-1);
+font-family: var(–font-mono);
 }
-.time-input:focus { outline: none; border-color: var(--accent); }
+.time-input:focus { outline: none; border-color: var(–accent); }
 
 .toggle-wrapper {
-  width: 48px; height: 27px;
-  border-radius: 99px;
-  background: var(--parchment);
-  border: 1px solid var(--border-mid);
-  position: relative;
-  cursor: pointer;
-  transition: background .2s;
-  flex-shrink: 0;
+width: 48px; height: 27px;
+border-radius: 99px;
+background: var(–parchment);
+border: 1px solid var(–border-mid);
+position: relative;
+cursor: pointer;
+transition: background .2s;
+flex-shrink: 0;
 }
-.toggle-wrapper.on { background: var(--accent); border-color: var(--accent); }
+.toggle-wrapper.on { background: var(–accent); border-color: var(–accent); }
 .toggle-knob {
-  position: absolute;
-  width: 21px; height: 21px;
-  border-radius: 50%;
-  background: white;
-  top: 2px; left: 2px;
-  transition: transform .2s cubic-bezier(.34,1.56,.64,1);
-  box-shadow: 0 1px 4px rgba(0,0,0,.15);
+position: absolute;
+width: 21px; height: 21px;
+border-radius: 50%;
+background: white;
+top: 2px; left: 2px;
+transition: transform .2s cubic-bezier(.34,1.56,.64,1);
+box-shadow: 0 1px 4px rgba(0,0,0,.15);
 }
 .toggle-wrapper.on .toggle-knob { transform: translateX(21px); }
-.notif-status { font-size: 12px; color: var(--accent); padding: 6px 16px 12px; }
+.notif-status { font-size: 12px; color: var(–accent); padding: 6px 16px 12px; }
 .notif-status.denied { color: #c05050; }
 
 .stats-row { display: flex; gap: 10px; padding: 0 16px; margin-bottom: 14px; }
 .stat-card {
-  flex: 1;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 14px 10px;
-  text-align: center;
+flex: 1;
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius-sm);
+padding: 14px 10px;
+text-align: center;
 }
 .stat-num {
-  font-family: var(--font-display);
-  font-size: 32px;
-  color: var(--espresso);
-  line-height: 1;
+font-family: var(–font-display);
+font-size: 32px;
+color: var(–espresso);
+line-height: 1;
 }
 .stat-lbl {
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--text-3);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-top: 3px;
+font-size: 10px;
+font-weight: 700;
+color: var(–text-3);
+text-transform: uppercase;
+letter-spacing: 1px;
+margin-top: 3px;
 }
 
 /* ── TOAST ── */
 .toast {
-  position: fixed;
-  top: 20px; left: 50%;
-  transform: translateX(-50%) translateY(-80px);
-  background: var(--espresso);
-  color: white;
-  font-weight: 600;
-  font-size: 13px;
-  padding: 10px 20px;
-  border-radius: 99px;
-  z-index: 200;
-  transition: transform .4s cubic-bezier(.34,1.56,.64,1);
-  white-space: nowrap;
-  pointer-events: none;
+position: fixed;
+top: 20px; left: 50%;
+transform: translateX(-50%) translateY(-80px);
+background: var(–espresso);
+color: white;
+font-weight: 600;
+font-size: 13px;
+padding: 10px 20px;
+border-radius: 99px;
+z-index: 200;
+transition: transform .4s cubic-bezier(.34,1.56,.64,1);
+white-space: nowrap;
+pointer-events: none;
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
-.empty-state { text-align: center; padding: 36px 24px; color: var(--text-3); font-size: 14px; }
+.empty-state { text-align: center; padding: 36px 24px; color: var(–text-3); font-size: 14px; }
+
+/* ── WARM-UP SECTION ── */
+.warmup-section {
+margin: 0 16px 16px;
+background: var(–surface);
+border: 1px solid var(–border);
+border-left: 3px solid #7BA7BC;
+border-radius: var(–radius);
+overflow: hidden;
+}
+.warmup-header {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 13px 16px;
+cursor: pointer;
+user-select: none;
+-webkit-tap-highlight-color: transparent;
+}
+.warmup-title {
+font-size: 13px;
+font-weight: 700;
+color: #5A8AAA;
+letter-spacing: .5px;
+text-transform: uppercase;
+}
+.warmup-sub {
+font-size: 12px;
+color: var(–text-3);
+margin-top: 1px;
+}
+.warmup-body {
+display: none;
+border-top: 1px solid var(–border);
+}
+.warmup-section.open .warmup-body { display: block; }
+.warmup-section.open .ex-chevron { transform: rotate(180deg); }
+.warmup-exercise {
+padding: 12px 16px;
+border-bottom: 1px solid var(–border);
+}
+.warmup-exercise:last-child { border-bottom: none; }
+.warmup-ex-name {
+font-size: 14px;
+font-weight: 600;
+color: var(–text-1);
+margin-bottom: 2px;
+}
+.warmup-ex-sub { font-size: 12px; color: var(–text-3); margin-bottom: 6px; }
+.warmup-ex-howto {
+font-size: 13px;
+color: var(–text-2);
+line-height: 1.6;
+}
 </style>
+
 </head>
 <body>
 <div id="app">
 
   <!-- TODAY -->
+
   <div class="screen active" id="screen-today">
     <div class="scroll-area">
       <div class="page-header">
@@ -751,6 +808,7 @@ nav {
   </div>
 
   <!-- CALENDAR -->
+
   <div class="screen" id="screen-calendar">
     <div class="scroll-area">
       <div class="page-header">
@@ -768,6 +826,7 @@ nav {
   </div>
 
   <!-- SETTINGS -->
+
   <div class="screen" id="screen-settings">
     <div class="scroll-area">
       <div class="page-header">
@@ -775,46 +834,50 @@ nav {
         <h1>Settings</h1>
       </div>
 
-      <div class="section-label" style="margin-bottom:10px">This Week</div>
-      <div class="stats-row">
-        <div class="stat-card"><div class="stat-num" id="stat-streak">0</div><div class="stat-lbl">Streak</div></div>
-        <div class="stat-card"><div class="stat-num" id="stat-week">0</div><div class="stat-lbl">This Week</div></div>
-        <div class="stat-card"><div class="stat-num" id="stat-total">0</div><div class="stat-lbl">Total</div></div>
-      </div>
+```
+  <div class="section-label" style="margin-bottom:10px">This Week</div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-num" id="stat-streak">0</div><div class="stat-lbl">Streak</div></div>
+    <div class="stat-card"><div class="stat-num" id="stat-week">0</div><div class="stat-lbl">This Week</div></div>
+    <div class="stat-card"><div class="stat-num" id="stat-total">0</div><div class="stat-lbl">Total</div></div>
+  </div>
 
-      <div class="section-label" style="margin-bottom:10px">Notifications</div>
-      <div class="settings-section">
-        <div class="settings-row">
-          <div>
-            <div class="settings-label">Daily Reminder</div>
-            <div class="settings-sub">Get notified with today's workout</div>
-          </div>
-          <div class="toggle-wrapper" id="notif-toggle"><div class="toggle-knob"></div></div>
-        </div>
-        <div class="settings-row">
-          <div class="settings-label">Reminder Time</div>
-          <input type="time" class="time-input" id="notif-time" value="08:00"/>
-        </div>
-        <div class="notif-status" id="notif-status">Tap toggle to enable</div>
+  <div class="section-label" style="margin-bottom:10px">Notifications</div>
+  <div class="settings-section">
+    <div class="settings-row">
+      <div>
+        <div class="settings-label">Daily Reminder</div>
+        <div class="settings-sub">Get notified with today's workout</div>
       </div>
+      <div class="toggle-wrapper" id="notif-toggle"><div class="toggle-knob"></div></div>
+    </div>
+    <div class="settings-row">
+      <div class="settings-label">Reminder Time</div>
+      <input type="time" class="time-input" id="notif-time" value="08:00"/>
+    </div>
+    <div class="notif-status" id="notif-status">Tap toggle to enable</div>
+  </div>
 
-      <div class="section-label" style="margin-bottom:10px">About</div>
-      <div class="settings-section">
-        <div class="settings-row">
-          <div>
-            <div class="settings-label">Lift Tracker</div>
-            <div class="settings-sub">Smart progressive overload • v2.0</div>
-          </div>
-        </div>
-        <div class="settings-row">
-          <div class="settings-label">Clear All Data</div>
-          <button onclick="clearData()" style="background:none;border:1px solid rgba(192,80,80,.3);border-radius:8px;padding:6px 12px;color:#c05050;font-size:12px;font-family:var(--font-body);cursor:pointer;">Reset</button>
-        </div>
+  <div class="section-label" style="margin-bottom:10px">About</div>
+  <div class="settings-section">
+    <div class="settings-row">
+      <div>
+        <div class="settings-label">Lift Tracker</div>
+        <div class="settings-sub">Smart progressive overload • v2.0</div>
       </div>
     </div>
+    <div class="settings-row">
+      <div class="settings-label">Clear All Data</div>
+      <button onclick="clearData()" style="background:none;border:1px solid rgba(192,80,80,.3);border-radius:8px;padding:6px 12px;color:#c05050;font-size:12px;font-family:var(--font-body);cursor:pointer;">Reset</button>
+    </div>
+  </div>
+</div>
+```
+
   </div>
 
   <!-- NAV -->
+
   <nav>
     <button class="nav-btn active" data-screen="today">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
@@ -848,155 +911,172 @@ nav {
 // Sun=0 Mon=1 Tue=2 Wed=3 Thu=4 Fri=5 Sat=6
 // ═══════════════════════════════════════════
 
+// Warm-up shown at top of every leg/jump day
+const WARMUP = [
+  { name: 'Jump Rope', sets: 1, reps: null, type: 'warmup',
+    howto: 'Jump at a comfortable pace, staying on the balls of your feet. Keep your elbows close to your sides and use small wrist circles to turn the rope. This raises your heart rate and primes your calves and ankles.',
+    note: '2 minutes continuous. Easy pace — this is activation, not cardio.' },
+  { name: 'Walking Lunges', sets: 1, reps: 12, type: 'warmup',
+    howto: 'Step forward into a lunge, lowering your back knee toward the floor. Push through your front heel to step through into the next lunge. Keep your torso upright and your front knee behind your toes.',
+    note: '12 each leg. Take your time — full range of motion.' },
+  { name: 'Leg Swings', sets: 1, reps: 15, type: 'warmup',
+    howto: 'Stand on one foot, holding a wall for balance. Swing your free leg forward and back in a controlled arc, gradually increasing the range. Then switch to side-to-side swings. Keep the movement relaxed.',
+    note: '15 each direction, each leg.' },
+  { name: 'Pogo Jumps (warm-up)', sets: 3, reps: 25, type: 'warmup',
+    howto: 'Bounce on the balls of your feet with minimal knee bend. Keep contacts short and springy — think of the ground as hot. Arms stay relatively still. This primes your elastic energy system.',
+    note: '3 sets of 25. Light and fast — not high.' },
+  { name: 'Squat Jumps (warm-up)', sets: 3, reps: 5, type: 'warmup',
+    howto: 'Descend into a squat, then explode upward as high as possible. Land softly through your toes then heels, absorbing the impact with bent knees. Reset fully before the next rep.',
+    note: '3 sets of 5. Each one should be near-maximal effort.' },
+];
+
 const SCHEDULE = {
+  // Sunday — Push
   0: {
-    name: 'Push', category: 'Power + Strength', bodyPart: 'upper',
+    name: 'Push', category: 'Chest / Shoulders / Triceps', bodyPart: 'upper',
+    warmup: false,
     exercises: [
-      { name: 'Explosive Push-Ups', sets: 4, reps: 6, type: 'power',
-        howto: 'Start in a standard push-up position with hands slightly wider than shoulder-width. Lower yourself slowly, then drive up as explosively as possible — aim to get your hands off the ground at the top. Land softly and reset fully before the next rep.',
-        note: 'Full rest between sets. Speed is everything here — if you can\'t be explosive, rest longer.' },
-      { name: 'Incline Dumbbell Press', sets: 4, reps: 8, type: 'strength',
-        howto: 'Set a bench to 30–45°. Hold dumbbells at chest level with elbows at about 45° from your body. Press up and slightly in, squeezing at the top. Lower with control over 2–3 seconds.',
-        note: null },
-      { name: 'Push Press', sets: 3, reps: 6, type: 'power',
-        howto: 'Hold dumbbells or a barbell at shoulder height. Dip your knees slightly, then drive through your legs as you press overhead. The leg drive transfers power into the bar — this is not a strict press.',
-        note: 'Use the leg drive intentionally. If you\'re not feeling the transfer, dip a bit deeper.' },
-      { name: 'Dips', sets: 3, reps: 10, type: 'strength',
-        howto: 'Support yourself on parallel bars with arms fully extended. Lean forward slightly to target chest. Lower until elbows reach 90°, then press back up. Keep movement controlled — no swinging.',
-        note: 'Bench dips are fine if no bars are available. Add weight once bodyweight feels easy.' },
-      { name: 'Lateral Raises', sets: 3, reps: 15, type: 'injury',
-        howto: 'Stand holding light dumbbells at your sides. Raise arms out to the sides until they\'re parallel to the floor, keeping a slight bend in the elbows. Lower slowly — the lowering phase matters as much as the raise.',
-        note: 'Go lighter than you think. These are for shoulder durability, not ego.' },
-      { name: 'Plank / Ab Wheel', sets: 3, reps: null, type: 'core',
-        howto: 'Plank: Hold a rigid straight line from head to heels, bracing your entire core. Ab wheel: From kneeling, roll forward slowly until your hips almost touch the ground, then pull back using your abs — not your back.',
-        note: 'For plank: aim for 30–60 seconds per set. For ab wheel: 8–12 controlled reps.' },
+      { name: 'Dumbbell Bench Press', sets: 4, reps: 8, type: 'strength',
+        howto: 'Lie on a bench with dumbbells at chest height, elbows at about 45° from your torso. Press up and slightly in, bringing the dumbbells close together at the top without touching. Lower slowly over 2–3 seconds, feeling a stretch in your chest.',
+        note: 'Target 5–8 reps. If you hit 8 on every set with clean form, you\'re ready to go heavier next week.' },
+      { name: 'Single-Arm KB Overhead Press', sets: 4, reps: 6, type: 'strength',
+        howto: 'Hold a kettlebell in one hand at shoulder height, palm facing in. Press straight up until your arm is fully extended overhead. Lower with control. Keep your core braced and avoid leaning to the side.',
+        note: '6 each arm. The single-arm version challenges your core much more than bilateral pressing.' },
+      { name: 'Deficit Push-Ups', sets: 3, reps: 10, type: 'strength',
+        howto: 'Place each hand on a dumbbell handle so your chest can descend below hand height. Lower slowly until your chest is below your hands, then press back up. This increases range of motion and pectoral stretch.',
+        note: 'Hands on dumbbells. Keep elbows at 45° — not flared wide.' },
+      { name: 'Dumbbell Floor Press', sets: 3, reps: 8, type: 'strength',
+        howto: 'Lie on the floor with dumbbells at chest height. Press up until arms are extended, then lower until your upper arms rest on the floor — pause briefly, then press again. The floor limits range and removes leg drive.',
+        note: 'The pause at the bottom makes this harder than it looks. Great for tricep lockout strength.' },
+      { name: 'Band Triceps Pushdowns', sets: 3, reps: 12, type: 'strength',
+        howto: 'Anchor a band overhead. Grip the band with both hands and press down until your arms are fully extended, keeping your elbows locked at your sides. Squeeze at the bottom, then let the band pull your hands back up slowly.',
+        note: 'Keep your upper arms still throughout — only your forearms move.' },
+      { name: 'Farmer Carry (KB)', sets: 4, reps: null, type: 'core',
+        howto: 'Pick up two heavy kettlebells with a strong grip. Stand tall, brace your core, pack your shoulders down and back. Walk with purpose — short, controlled steps. Don\'t let the weight pull you into a lean.',
+        note: '30 seconds per set. Go as heavy as you can while maintaining perfect posture.' },
     ]
   },
+  // Monday — Pull
   1: {
-    name: 'Pull', category: 'Strength + Control', bodyPart: 'upper',
+    name: 'Pull', category: 'Back / Biceps / Grip', bodyPart: 'upper',
+    warmup: false,
     exercises: [
-      { name: 'Single-Arm DB Row', sets: 4, reps: 10, type: 'strength',
-        howto: 'Brace one knee and hand on a bench. Hold a dumbbell in the free hand, arm fully extended. Row the dumbbell up toward your hip — not your shoulder — squeezing your lats at the top. Keep your back flat throughout.',
-        note: 'Each side counts as one set. Focus on feeling your back, not just pulling with your arm.' },
-      { name: 'Inverted Rows', sets: 3, reps: 12, type: 'strength',
-        howto: 'Set a bar in a rack at hip height. Lie underneath with arms extended, gripping the bar. Keep your body rigid — like a reverse plank — and pull your chest to the bar. Lower with control.',
-        note: 'Make it harder by lowering the bar or elevating your feet. Skip if no setup is available.' },
-      { name: 'Face Pulls / Band Pull-Aparts', sets: 3, reps: 15, type: 'injury',
-        howto: 'Face pulls: Attach a rope to a cable at face height. Pull toward your face, flaring elbows out and back. Band pull-aparts: Hold a band in front of you and pull it apart to your sides, squeezing your shoulder blades.',
-        note: 'This is your most important shoulder health exercise. Never skip it.' },
-      { name: 'Rear Delt Fly', sets: 3, reps: 15, type: 'injury',
-        howto: 'Hinge forward at the hips with a flat back, holding light dumbbells. Raise them out to the sides with a slight bend in the elbows, focusing on squeezing the back of your shoulders. Avoid shrugging.',
-        note: 'Go very light. These are small muscles and easy to injure if you use too much weight.' },
-      { name: 'Hammer Curls', sets: 3, reps: 12, type: 'unilateral',
-        howto: 'Hold dumbbells at your sides with palms facing each other (neutral grip). Curl one or both arms up, keeping the neutral grip throughout. This targets the brachialis and forearms alongside the bicep.',
-        note: null },
-      { name: 'Russian Twists / Cable Rotation', sets: 3, reps: null, type: 'core',
-        howto: 'Russian twists: Sit with knees bent, feet elevated slightly, torso leaning back 45°. Rotate side to side, touching the ground (or a weight) with your hands. Cable rotations: Stand side-on to a cable and rotate your torso away from it, keeping arms extended.',
-        note: 'Aim for 15–20 reps per side. Move from your core, not just your arms.' },
+      { name: 'Single-Arm DB Row', sets: 4, reps: 8, type: 'strength',
+        howto: 'Brace one knee and hand on a bench. Hold a dumbbell in the free hand, arm extended straight down. Row toward your hip — not your ear — squeezing your lat at the top. Lower fully before the next rep.',
+        note: '6–8 each arm. Think about pulling with your elbow, not your hand.' },
+      { name: 'KB Gorilla Rows', sets: 4, reps: 8, type: 'strength',
+        howto: 'Place two kettlebells on the floor, shoulder-width apart. Hinge over them with a flat back, gripping both handles. Row one kettlebell up while the other stays planted as a balance point, then alternate.',
+        note: 'Keep your hips square — don\'t rotate. Brace hard through your whole core.' },
+      { name: 'Band Face Pulls', sets: 3, reps: 15, type: 'injury',
+        howto: 'Anchor a band at face height. Pull toward your face, driving your elbows back and out wide. Finish with your hands beside your ears, squeezing your rear delts and upper back. Return slowly.',
+        note: 'This protects your shoulder health. Never skip it — it counterbalances all the pressing you do.' },
+      { name: 'Dumbbell Hammer Curls', sets: 3, reps: 8, type: 'unilateral',
+        howto: 'Hold dumbbells with palms facing each other. Curl both (or alternating) arms up, maintaining the neutral grip throughout. This hits the brachialis and forearms more than a standard curl.',
+        note: 'Full range — fully extend at the bottom, squeeze hard at the top.' },
+      { name: 'Rear Delt Raises', sets: 3, reps: 12, type: 'injury',
+        howto: 'Hinge forward at the hips, back flat, holding light dumbbells. Raise both arms out to the sides with a slight bend at the elbow, squeezing the back of your shoulders at the top. Lower slowly.',
+        note: 'Very light weight. Controlling the lowering phase is as important as the raise itself.' },
+      { name: 'Suitcase Carry (KB)', sets: 4, reps: null, type: 'core',
+        howto: 'Hold one kettlebell in one hand at your side — like a suitcase. Stand tall and walk, resisting the urge to lean toward the weight. Your goal is to look like you\'re carrying nothing.',
+        note: '30 seconds each side per set. This trains lateral core stability that nothing else does.' },
     ]
   },
+  // Tuesday — Legs (Power + Strength)
   2: {
-    name: 'Legs', category: 'Strength + Jump Power', bodyPart: 'lower',
+    name: 'Legs', category: 'Power + Strength', bodyPart: 'lower',
+    warmup: true,
     exercises: [
-      { name: 'Back Squat', sets: 5, reps: 5, type: 'strength',
-        howto: 'Bar sits across upper traps (high bar) or rear delts (low bar). Feet shoulder-width, toes slightly out. Brace hard, take a deep breath, and descend until hips are at or below knee height. Drive through your full foot on the way up.',
-        note: '75–85% of your max. Heavy but clean — if form breaks, the weight is too heavy. Rest 2–3 min between sets.' },
-      { name: 'Jump Squats', sets: 4, reps: 3, type: 'power',
-        howto: 'Hold light dumbbells or use bodyweight. Descend into a quarter squat, then explode upward as fast as possible. Land softly with bent knees to absorb impact. Stand fully before the next rep.',
-        note: 'Full reset between reps. The goal is maximum intent — each jump should be all-out.' },
-      { name: 'Romanian Deadlift', sets: 4, reps: 6, type: 'strength',
-        howto: 'Hold the bar at hip height with a shoulder-width grip. Push your hips back (not down) while lowering the bar along your legs, maintaining a flat back. Stop when you feel a deep hamstring stretch, then drive hips forward to return.',
-        note: 'Slow and controlled on the way down. Feel the hamstrings loading, not your lower back.' },
-      { name: 'Bulgarian Split Squat', sets: 3, reps: 8, type: 'unilateral',
-        howto: 'Rear foot elevated on a bench, front foot far enough forward that your shin stays vertical when you descend. Lower your back knee toward the ground, keeping your front shin vertical. Drive through your front heel to stand.',
-        note: 'Each leg separately. This will feel awkward at first — stick with it, it\'s one of the best single-leg movements.' },
-      { name: 'Box / Broad Jumps', sets: 5, reps: 3, type: 'plyo',
-        howto: 'Box jumps: Stand facing a box, load your hips back, then jump onto the box landing softly with both feet. Step down. Broad jumps: Jump forward as far as possible, landing balanced with soft knees.',
-        note: 'Quality over distance or height. Each jump should feel powerful and controlled, not rushed.' },
-      { name: 'Nordic Hamstring Curls', sets: 3, reps: 6, type: 'injury',
-        howto: 'Kneel with feet anchored (under a bar, sofa, or partner). Keep your body straight from knees to head. Slowly lower yourself toward the ground using your hamstrings to resist. Use hands to push back up.',
-        note: 'These are hard. 4–6 reps is plenty. They\'re the best hamstring injury prevention exercise known.' },
-      { name: 'Standing Calf Raises', sets: 3, reps: 15, type: 'strength',
-        howto: 'Stand on a step or flat surface with feet hip-width. Rise up on your toes as high as possible, pause for a moment at the top, then lower slowly — going below the step level if possible for full range.',
-        note: 'Slow and full range beats fast and partial every time.' },
-      { name: 'Plank / Dead Bug', sets: 3, reps: null, type: 'core',
-        howto: 'Dead bug: Lie on your back, arms pointing up, knees at 90°. Slowly lower one arm overhead while extending the opposite leg — keeping your lower back pressed to the floor. Return and alternate. Plank: rigid straight line, head to heels.',
-        note: '8–10 dead bug reps per side, or 30–60 second plank holds.' },
+      { name: 'Depth Drops → Vertical Jump', sets: 5, reps: 3, type: 'plyo',
+        howto: 'Step off a low box (6–12 inches) — don\'t jump off. The moment both feet hit the ground, immediately explode upward as high as possible. The drop loads your muscles eccentrically so you can produce more force on the jump.',
+        note: 'The key is minimal ground contact time. Step off, hit, and go — don\'t pause on landing.' },
+      { name: 'DB Bulgarian Split Squats', sets: 4, reps: 6, type: 'unilateral',
+        howto: 'Hold dumbbells at your sides. Rear foot elevated on a bench, front foot out far enough that your shin stays vertical when you descend. Lower your back knee toward the floor, then drive through your front heel to stand.',
+        note: '6 each leg. One of the best single-leg strength exercises. Stay patient with the balance — it comes.' },
+      { name: 'Kettlebell Swings', sets: 5, reps: 8, type: 'power',
+        howto: 'Hinge at the hips — not squat — pushing them back as the KB swings between your legs. Drive your hips forward explosively to swing the KB to chest height. Let it fall back and hinge again. The power comes from your hips, not your arms.',
+        note: 'This is a hip hinge, not a squat. If your knees are bending deeply, you\'re squatting it — fix that.' },
+      { name: 'Band-Resisted Jumps', sets: 4, reps: 5, type: 'power',
+        howto: 'Anchor a resistance band around your waist (or have a partner hold it behind you). Squat down and jump as explosively as possible against the band\'s resistance. Land softly, reset, and repeat.',
+        note: 'The band forces you to produce more force to jump the same height. Reset fully between reps.' },
+      { name: 'Single-Leg Bench Jumps', sets: 4, reps: 3, type: 'plyo',
+        howto: 'Stand on one leg in front of a bench or low box. Load your hip and jump up onto the bench with one leg. Step or land softly, step back down, and repeat. Focus on a powerful single push through your whole foot.',
+        note: '3 each leg per set. Don\'t rush — quality of push-off matters more than speed between reps.' },
     ]
   },
+  // Wednesday — Push
   3: {
-    name: 'Push', category: 'Power + Strength', bodyPart: 'upper',
+    name: 'Push', category: 'Chest / Shoulders / Triceps', bodyPart: 'upper',
+    warmup: false,
     exercises: [
-      { name: 'Explosive Push-Ups', sets: 4, reps: 6, type: 'power',
-        howto: 'Start in a standard push-up position with hands slightly wider than shoulder-width. Lower yourself slowly, then drive up as explosively as possible — aim to get your hands off the ground at the top. Land softly and reset fully before the next rep.',
-        note: 'Full rest between sets. Speed is everything here — if you can\'t be explosive, rest longer.' },
-      { name: 'Incline Dumbbell Press', sets: 4, reps: 8, type: 'strength',
-        howto: 'Set a bench to 30–45°. Hold dumbbells at chest level with elbows at about 45° from your body. Press up and slightly in, squeezing at the top. Lower with control over 2–3 seconds.',
-        note: null },
-      { name: 'Push Press', sets: 3, reps: 6, type: 'power',
-        howto: 'Hold dumbbells or a barbell at shoulder height. Dip your knees slightly, then drive through your legs as you press overhead. The leg drive transfers power into the bar — this is not a strict press.',
-        note: 'Use the leg drive intentionally. If you\'re not feeling the transfer, dip a bit deeper.' },
-      { name: 'Dips', sets: 3, reps: 10, type: 'strength',
-        howto: 'Support yourself on parallel bars with arms fully extended. Lean forward slightly to target chest. Lower until elbows reach 90°, then press back up. Keep movement controlled — no swinging.',
-        note: 'Bench dips are fine if no bars are available. Add weight once bodyweight feels easy.' },
-      { name: 'Lateral Raises', sets: 3, reps: 15, type: 'injury',
-        howto: 'Stand holding light dumbbells at your sides. Raise arms out to the sides until they\'re parallel to the floor, keeping a slight bend in the elbows. Lower slowly — the lowering phase matters as much as the raise.',
-        note: 'Go lighter than you think. These are for shoulder durability, not ego.' },
-      { name: 'Plank / Ab Wheel', sets: 3, reps: null, type: 'core',
-        howto: 'Plank: Hold a rigid straight line from head to heels, bracing your entire core. Ab wheel: From kneeling, roll forward slowly until your hips almost touch the ground, then pull back using your abs — not your back.',
-        note: 'For plank: aim for 30–60 seconds per set. For ab wheel: 8–12 controlled reps.' },
+      { name: 'Dumbbell Bench Press', sets: 4, reps: 8, type: 'strength',
+        howto: 'Lie on a bench with dumbbells at chest height, elbows at about 45° from your torso. Press up and slightly in, bringing the dumbbells close together at the top. Lower slowly over 2–3 seconds, feeling a stretch in your chest.',
+        note: 'Target 5–8 reps. If you hit 8 on every set cleanly, go heavier next week.' },
+      { name: 'Single-Arm KB Overhead Press', sets: 4, reps: 6, type: 'strength',
+        howto: 'Hold a kettlebell in one hand at shoulder height, palm facing in. Press straight up until your arm is fully extended overhead. Lower with control. Keep your core braced and avoid leaning to the side.',
+        note: '6 each arm. The single-arm version challenges your core far more than bilateral pressing.' },
+      { name: 'Deficit Push-Ups', sets: 3, reps: 10, type: 'strength',
+        howto: 'Place each hand on a dumbbell handle. Lower until your chest descends below your hands, then press back up. This increases range of motion and pectoral stretch significantly.',
+        note: 'Keep elbows at 45° — not flared wide. Slow on the way down.' },
+      { name: 'Dumbbell Floor Press', sets: 3, reps: 8, type: 'strength',
+        howto: 'Lie on the floor with dumbbells at chest height. Press up until arms are extended, then lower until your upper arms rest on the floor. Pause briefly, then press again.',
+        note: 'The pause at the bottom eliminates stretch-reflex and builds real pressing strength.' },
+      { name: 'Band Triceps Pushdowns', sets: 3, reps: 12, type: 'strength',
+        howto: 'Anchor a band overhead. Grip with both hands and press down until arms are fully extended, elbows locked at your sides. Squeeze at the bottom, then let the band slowly pull your hands back up.',
+        note: 'Upper arms don\'t move — only your forearms.' },
+      { name: 'Farmer Carry (KB)', sets: 4, reps: null, type: 'core',
+        howto: 'Pick up two heavy kettlebells. Stand tall, core braced, shoulders packed. Walk with controlled steps — don\'t let the weight pull you into a lean or shrug.',
+        note: '30 seconds per set. Heavier than you think you can handle.' },
     ]
   },
+  // Thursday — Pull
   4: {
-    name: 'Pull', category: 'Strength + Control', bodyPart: 'upper',
+    name: 'Pull', category: 'Back / Biceps / Grip', bodyPart: 'upper',
+    warmup: false,
     exercises: [
-      { name: 'Single-Arm DB Row', sets: 4, reps: 10, type: 'strength',
-        howto: 'Brace one knee and hand on a bench. Hold a dumbbell in the free hand, arm fully extended. Row the dumbbell up toward your hip — not your shoulder — squeezing your lats at the top. Keep your back flat throughout.',
-        note: 'Each side counts as one set. Focus on feeling your back, not just pulling with your arm.' },
-      { name: 'Inverted Rows', sets: 3, reps: 12, type: 'strength',
-        howto: 'Set a bar in a rack at hip height. Lie underneath with arms extended, gripping the bar. Keep your body rigid — like a reverse plank — and pull your chest to the bar. Lower with control.',
-        note: 'Make it harder by lowering the bar or elevating your feet. Skip if no setup is available.' },
-      { name: 'Face Pulls / Band Pull-Aparts', sets: 3, reps: 15, type: 'injury',
-        howto: 'Face pulls: Attach a rope to a cable at face height. Pull toward your face, flaring elbows out and back. Band pull-aparts: Hold a band in front of you and pull it apart to your sides, squeezing your shoulder blades.',
-        note: 'This is your most important shoulder health exercise. Never skip it.' },
-      { name: 'Rear Delt Fly', sets: 3, reps: 15, type: 'injury',
-        howto: 'Hinge forward at the hips with a flat back, holding light dumbbells. Raise them out to the sides with a slight bend in the elbows, focusing on squeezing the back of your shoulders. Avoid shrugging.',
-        note: 'Go very light. These are small muscles and easy to injure if you use too much weight.' },
-      { name: 'Hammer Curls', sets: 3, reps: 12, type: 'unilateral',
-        howto: 'Hold dumbbells at your sides with palms facing each other (neutral grip). Curl one or both arms up, keeping the neutral grip throughout. This targets the brachialis and forearms alongside the bicep.',
+      { name: 'Single-Arm DB Row', sets: 4, reps: 8, type: 'strength',
+        howto: 'Brace one knee and hand on a bench. Row toward your hip, squeezing your lat at the top. Lower fully before the next rep.',
+        note: '6–8 each arm. Pull with your elbow, not your hand.' },
+      { name: 'KB Gorilla Rows', sets: 4, reps: 8, type: 'strength',
+        howto: 'Two kettlebells on the floor, shoulder-width. Hinge over with a flat back. Row one while the other stays as your balance point, then alternate.',
+        note: 'Hips stay square. Core braced throughout.' },
+      { name: 'Band Face Pulls', sets: 3, reps: 15, type: 'injury',
+        howto: 'Anchor a band at face height. Pull toward your face driving elbows back and out wide. Finish with hands beside your ears, squeezing rear delts. Return slowly.',
+        note: 'Never skip this. It protects your shoulder health long-term.' },
+      { name: 'Dumbbell Hammer Curls', sets: 3, reps: 8, type: 'unilateral',
+        howto: 'Palms facing each other throughout the curl. Full range — fully extend at the bottom, squeeze hard at the top.',
         note: null },
-      { name: 'Russian Twists / Cable Rotation', sets: 3, reps: null, type: 'core',
-        howto: 'Russian twists: Sit with knees bent, feet elevated slightly, torso leaning back 45°. Rotate side to side, touching the ground (or a weight) with your hands. Cable rotations: Stand side-on to a cable and rotate your torso away from it, keeping arms extended.',
-        note: 'Aim for 15–20 reps per side. Move from your core, not just your arms.' },
+      { name: 'Rear Delt Raises', sets: 3, reps: 12, type: 'injury',
+        howto: 'Hinged forward, flat back, light dumbbells. Raise out to the sides squeezing rear delts. Lower with control.',
+        note: 'Light weight. The lowering matters as much as the raise.' },
+      { name: 'Suitcase Carry (KB)', sets: 4, reps: null, type: 'core',
+        howto: 'One kettlebell at your side. Stand tall, resist the lean. Walk looking like you\'re carrying nothing.',
+        note: '30 seconds each side. The best lateral core stability exercise there is.' },
     ]
   },
+  // Friday — Legs (Elasticity + Speed)
   5: {
-    name: 'Legs', category: 'Sprint + Reactive Plyo', bodyPart: 'lower',
+    name: 'Legs', category: 'Elasticity + Speed', bodyPart: 'lower',
+    warmup: true,
     exercises: [
-      { name: 'Sprint Drills', sets: 1, reps: null, type: 'speed',
-        howto: 'A-skips: March forward driving your knee up and your opposite arm forward with each step. Wall drives: Face a wall, lean into it with straight arms, and alternate driving knees up rapidly. Marching: Exaggerate your running motion in slow-motion.',
-        note: '10 minutes total. This is your warm-up — get your nervous system ready.' },
-      { name: '10–20m Acceleration Sprints', sets: 8, reps: 1, type: 'speed',
-        howto: 'Start from a standing or split stance. Explode forward for 10–20 meters, focusing on driving your arms and staying low in the first few steps. Don\'t stand up too early — stay in your acceleration position.',
-        note: '6–10 total reps. Full recovery between each — 1.5 to 3 minutes. Tired sprints teach bad habits.' },
-      { name: '3-Point / Block Starts', sets: 5, reps: 1, type: 'speed',
-        howto: 'Three-point start: One hand down, opposite foot forward, weight forward. Drive your back foot into the ground and push forward — not up. Focus on the first 2–3 steps being powerful and low.',
-        note: 'Powerful first step and forward lean are the goals. 4–6 reps total at full effort.' },
-      { name: 'Reactive Plyos', sets: 4, reps: null, type: 'plyo',
-        howto: 'Pogos: Bounce on the balls of your feet with minimal knee bend — fast, springy ground contacts. Depth jumps: Step off a low box, absorb the landing immediately, then explode up. Single-leg hops: Hop forward on one foot, sticking each landing.',
-        note: 'Choose one: Pogos 3×15–20 | Depth jumps 3–4×3 | Single-leg hops 3×4 each leg.' },
-      { name: 'Hip Thrusts', sets: 4, reps: 8, type: 'strength',
-        howto: 'Sit against a bench with a bar or dumbbell across your hips. Drive through your heels and squeeze your glutes to thrust your hips toward the ceiling. Hold briefly at the top before lowering. Your chin should be slightly tucked.',
-        note: 'Full hip extension at the top. This is one of the best glute exercises for sprinting power.' },
-      { name: 'Single-Leg RDL', sets: 3, reps: 6, type: 'unilateral',
-        howto: 'Stand on one leg, holding a dumbbell in the opposite hand. Hinge forward at the hip, extending your free leg behind you as a counterbalance. Keep your back flat and your hips square. Return by driving your standing heel into the ground.',
-        note: 'Each leg separately. Go slow — balance and control matter more than weight here.' },
-      { name: 'Side Plank / Pallof Press', sets: 3, reps: null, type: 'core',
-        howto: 'Side plank: Support yourself on one forearm and the side of your foot, keeping your body in a straight line. Stack your feet or stagger them for balance. Pallof press: Stand sideways to a cable, hold at chest height, and press straight out — resisting rotation.',
-        note: '30–45 seconds each side for side plank. 10–12 reps each side for Pallof press.' },
+      { name: 'Pogo Jumps', sets: 4, reps: 30, type: 'plyo',
+        howto: 'Bounce on the balls of your feet with minimal knee bend. Keep ground contact time as short as possible — think of the floor as hot. Arms stay relatively quiet. Stay rhythmic and springy.',
+        note: '4 sets of 30 contacts. Light and fast. This trains your tendons, not just your muscles.' },
+      { name: 'Max Approach Jumps', sets: 6, reps: 2, type: 'plyo',
+        howto: 'Take a 3–5 step approach at game speed, plant your foot, and jump as high as you can — exactly as you would in a game. This is not a practice drill. Treat every jump like it counts.',
+        note: '6 sets of 2 jumps. Full recovery between sets (2–3 min). Quality over quantity.' },
+      { name: 'DB Jump Squats', sets: 5, reps: 5, type: 'power',
+        howto: 'Hold light dumbbells at your sides. Descend into a squat, then explode upward as fast as possible. Land softly through your toes then heels. Reset fully — stand up, breathe, then go again.',
+        note: 'Light weight, maximum intent. Each jump should be all-out effort.' },
+      { name: 'Heavy Goblet Squats', sets: 4, reps: 6, type: 'strength',
+        howto: 'Hold a heavy kettlebell at chest height with both hands under the bell. Squat deep, keeping your chest tall and knees tracking your toes. Drive through your full foot to stand, squeezing glutes at the top.',
+        note: 'Go heavy. This is your main strength work for the day.' },
+      { name: 'Bounds', sets: 4, reps: null, type: 'plyo',
+        howto: 'Run and leap from one foot to the other in exaggerated bounding strides. Drive your knee up on each bound, spend as little time on the ground as possible, and cover as much ground as you can per stride.',
+        note: '4 sets of 20 meters. Think long and powerful, not fast. This builds the elastic force you use in a jump.' },
     ]
   },
-  6: { name: 'Rest', category: 'Rest & Recovery', bodyPart: null, exercises: [] },
+  // Saturday — Rest
+  6: { name: 'Rest', category: 'Rest & Recovery', bodyPart: null, warmup: false, exercises: [] },
 };
 
 // ═══════════════════════════════════════════
@@ -1004,12 +1084,23 @@ const SCHEDULE = {
 // ═══════════════════════════════════════════
 const UPPER_WEIGHTS = [6,12,15,20,25,35,40,50,60,70];
 const LOWER_WEIGHTS = [6,12,15,20,25,35,40,50,60,70];
-const UPPER_JUMP = 2.5;   // lbs to increase for upper body
-const LOWER_JUMP = 5;     // lbs to increase for lower body
+const KB_WEIGHTS    = [9,13,18,26,35,44,53,62,70];  // standard KB sizes in lbs (4,6,8,12,16,20,24,28,32kg)
+const UPPER_JUMP = 2.5;
+const LOWER_JUMP = 5;
 
-function snapToValid(weight, bodyPart) {
-  const list = bodyPart === 'lower' ? LOWER_WEIGHTS : UPPER_WEIGHTS;
-  // Find nearest valid weight
+// Exercises that use kettlebells — snap to KB sizes
+const KB_EXERCISES = new Set([
+  'Kettlebell Swings','Single-Arm KB Overhead Press','KB Gorilla Rows',
+  'Suitcase Carry (KB)','Farmer Carry (KB)','Heavy Goblet Squats'
+]);
+
+function getWeightList(exName, bodyPart) {
+  if (KB_EXERCISES.has(exName)) return KB_WEIGHTS;
+  return bodyPart === 'lower' ? LOWER_WEIGHTS : UPPER_WEIGHTS;
+}
+
+function snapToValid(weight, exName, bodyPart) {
+  const list = getWeightList(exName, bodyPart);
   let closest = list[0];
   for (const w of list) {
     if (Math.abs(w - weight) < Math.abs(closest - weight)) closest = w;
@@ -1017,11 +1108,10 @@ function snapToValid(weight, bodyPart) {
   return closest;
 }
 
-function nextWeight(currentWeight, bodyPart) {
-  const list = bodyPart === 'lower' ? LOWER_WEIGHTS : UPPER_WEIGHTS;
+function nextWeight(currentWeight, exName, bodyPart) {
+  const list = getWeightList(exName, bodyPart);
   const jump = bodyPart === 'lower' ? LOWER_JUMP : UPPER_JUMP;
   const target = currentWeight + jump;
-  // Find the next valid weight at or above target
   for (const w of list) {
     if (w >= target) return w;
   }
@@ -1078,9 +1168,9 @@ function getProjection(exName, dow, todayKey) {
   const ready = isReadyToProgress(exName, lastDow, lastEntry);
 
   if (ready) {
-    return { weight: nextWeight(lastWeight, bodyPart), ready: true };
+    return { weight: nextWeight(lastWeight, exName, bodyPart), ready: true };
   } else {
-    return { weight: snapToValid(lastWeight, bodyPart), ready: false };
+    return { weight: snapToValid(lastWeight, exName, bodyPart), ready: false };
   }
 }
 
@@ -1125,6 +1215,10 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
 // TODAY
 // ═══════════════════════════════════════════
 function renderToday() {
+  // Clear any old warm-up block
+  const old = document.getElementById('warmup-block');
+  if (old) old.remove();
+
   const today = state.today;
   const dow   = today.getDay();
   const sched = SCHEDULE[dow];
@@ -1151,6 +1245,34 @@ function renderToday() {
   const todayKey = dateKey(today);
   const checked  = loadChecked();
   const todayChecked = checked[todayKey] || {};
+
+  // Warm-up block for leg days
+  let warmupHTML = '';
+  if (sched.warmup) {
+    warmupHTML = `<div class="warmup-section" id="warmup-block">
+      <div class="warmup-header" onclick="document.getElementById('warmup-block').classList.toggle('open')">
+        <div>
+          <div class="warmup-title">🔥 Warm-Up First</div>
+          <div class="warmup-sub">Jump rope · lunges · leg swings · pogos · squat jumps</div>
+        </div>
+        <svg class="ex-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </div>
+      <div class="warmup-body">
+        ${WARMUP.map(w => `<div class="warmup-exercise">
+          <div class="warmup-ex-name">${w.name}</div>
+          <div class="warmup-ex-sub">${w.reps ? `${w.sets > 1 ? w.sets+'×' : ''}${w.reps} reps` : `${w.sets} set${w.sets>1?'s':''}`}</div>
+          <div class="warmup-ex-howto">${w.howto}</div>
+          ${w.note ? `<div class="ex-note-tip" style="margin-top:6px">${w.note}</div>` : ''}
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  // Insert warm-up before exercise list
+  const listEl = document.getElementById('exercise-list');
+  listEl.insertAdjacentHTML('beforebegin', warmupHTML);
 
   list.innerHTML = sched.exercises.map((ex, i) => {
     const lastW = getLastWeight(ex.name, todayKey);
@@ -1551,5 +1673,6 @@ if ('serviceWorker' in navigator) {
 renderToday();
 if (state.settings.notifEnabled) scheduleNotification();
 </script>
+
 </body>
 </html>
