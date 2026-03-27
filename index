@@ -1,0 +1,1678 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="theme-color" content="#F5F0E8"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<meta name="apple-mobile-web-app-title" content="Lift Tracker"/>
+<title>Lift Tracker</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Nunito:wght@300;400;500;600&family=Nunito+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --sand:       #F5F0E8;
+  --sand-dark:  #EDE5D8;
+  --parchment:  #E2D9C8;
+  --stone:      #C8BCA8;
+  --warm-gray:  #9A8E80;
+  --taupe:      #6B5E52;
+  --espresso:   #3D2E24;
+  --ink:        #241A14;
+
+–accent:     #B87333;  /* copper */
+–accent-light: #D4956A;
+–accent-pale:  #F0DCC8;
+
+–success:    #5A8A5A;
+–success-bg: #EAF2EA;
+
+–bg:         #F5F0E8;
+–surface:    #FFFFFF;
+–surface2:   #FAF7F2;
+–border:     rgba(107,94,82,.12);
+–border-mid: rgba(107,94,82,.20);
+
+–text-1: #241A14;
+–text-2: #6B5E52;
+–text-3: #9A8E80;
+
+–font-display: ‘Playfair Display’, Georgia, serif;
+–font-body:    ‘Nunito’, sans-serif;
+–font-mono:    ‘Nunito Mono’, monospace;
+
+–tab-h: 68px;
+–safe-bottom: env(safe-area-inset-bottom, 0px);
+–radius: 16px;
+–radius-sm: 10px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+height: 100%;
+overflow: hidden;
+background: var(–bg);
+color: var(–text-1);
+font-family: var(–font-body);
+-webkit-font-smoothing: antialiased;
+}
+
+#app {
+display: flex;
+flex-direction: column;
+height: 100dvh;
+max-width: 430px;
+margin: 0 auto;
+position: relative;
+overflow: hidden;
+}
+
+.screen { display: none; flex-direction: column; flex: 1; overflow: hidden; }
+.screen.active { display: flex; }
+
+.scroll-area {
+flex: 1;
+overflow-y: auto;
+overflow-x: hidden;
+padding-bottom: calc(var(–tab-h) + var(–safe-bottom) + 32px);
+-webkit-overflow-scrolling: touch;
+scrollbar-width: none;
+}
+.scroll-area::-webkit-scrollbar { display: none; }
+
+/* ── NAV ── */
+nav {
+position: fixed;
+bottom: 0; left: 50%;
+transform: translateX(-50%);
+width: 100%; max-width: 430px;
+height: calc(var(–tab-h) + var(–safe-bottom));
+padding-bottom: var(–safe-bottom);
+background: var(–surface);
+border-top: 1px solid var(–border-mid);
+display: flex;
+align-items: flex-start;
+justify-content: space-around;
+z-index: 100;
+}
+.nav-btn {
+flex: 1;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 3px;
+padding-top: 10px;
+background: none;
+border: none;
+cursor: pointer;
+color: var(–text-3);
+transition: color .2s;
+font-family: var(–font-body);
+font-size: 10px;
+font-weight: 600;
+letter-spacing: .4px;
+text-transform: uppercase;
+}
+.nav-btn.active { color: var(–accent); }
+.nav-btn svg { width: 22px; height: 22px; stroke-width: 1.8; }
+.nav-indicator {
+width: 18px; height: 2px;
+border-radius: 99px;
+background: var(–accent);
+opacity: 0;
+transition: opacity .2s;
+margin-top: 1px;
+}
+.nav-btn.active .nav-indicator { opacity: 1; }
+
+/* ── PAGE HEADER ── */
+.page-header {
+padding: 54px 22px 16px;
+}
+.page-header .eyebrow {
+font-size: 11px;
+font-weight: 600;
+letter-spacing: 2px;
+text-transform: uppercase;
+color: var(–accent);
+margin-bottom: 2px;
+}
+.page-header h1 {
+font-family: var(–font-display);
+font-size: 38px;
+font-weight: 700;
+line-height: 1.05;
+color: var(–espresso);
+}
+
+/* ── TODAY HERO CARD ── */
+.hero-card {
+margin: 0 16px 20px;
+background: var(–espresso);
+border-radius: 20px;
+padding: 22px 22px 18px;
+position: relative;
+overflow: hidden;
+}
+.hero-card::after {
+content: ‘’;
+position: absolute;
+top: -30px; right: -30px;
+width: 140px; height: 140px;
+border-radius: 50%;
+background: rgba(184,115,51,.18);
+pointer-events: none;
+}
+.hero-day-name {
+font-family: var(–font-display);
+font-size: 36px;
+font-weight: 700;
+color: var(–accent-light);
+line-height: 1;
+margin-bottom: 2px;
+}
+.hero-category {
+font-size: 12px;
+font-weight: 600;
+letter-spacing: 1.5px;
+text-transform: uppercase;
+color: rgba(255,255,255,.55);
+margin-bottom: 2px;
+}
+.hero-date {
+font-size: 13px;
+color: rgba(255,255,255,.38);
+}
+.hero-badge {
+display: inline-flex;
+align-items: center;
+gap: 6px;
+margin-top: 14px;
+background: rgba(184,115,51,.22);
+border: 1px solid rgba(184,115,51,.45);
+border-radius: 99px;
+padding: 5px 13px;
+font-size: 11px;
+font-weight: 700;
+letter-spacing: 1.2px;
+text-transform: uppercase;
+color: var(–accent-light);
+}
+.hero-badge-dot {
+width: 7px; height: 7px;
+border-radius: 50%;
+background: var(–accent-light);
+animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+0%,100% { opacity:1; transform:scale(1); }
+50% { opacity:.35; transform:scale(.75); }
+}
+
+/* progress bar */
+.hero-progress { margin-top: 14px; }
+.hero-prog-bar {
+height: 3px;
+background: rgba(255,255,255,.12);
+border-radius: 99px;
+overflow: hidden;
+margin-bottom: 5px;
+}
+.hero-prog-fill {
+height: 100%;
+background: var(–accent-light);
+border-radius: 99px;
+transition: width .5s ease;
+}
+.hero-prog-label {
+font-size: 11px;
+color: rgba(255,255,255,.4);
+font-family: var(–font-mono);
+}
+
+/* ── SECTION LABEL ── */
+.section-label {
+font-size: 11px;
+font-weight: 700;
+letter-spacing: 1.8px;
+text-transform: uppercase;
+color: var(–text-3);
+padding: 0 22px;
+margin-bottom: 10px;
+}
+
+/* ── EXERCISE CARDS ── */
+.exercise-list {
+padding: 0 16px;
+display: flex;
+flex-direction: column;
+gap: 8px;
+}
+
+.ex-card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius);
+overflow: hidden;
+transition: box-shadow .2s;
+animation: fadeUp .35s ease both;
+}
+.ex-card.open { box-shadow: 0 4px 20px rgba(61,46,36,.10); }
+
+@keyframes fadeUp {
+from { opacity:0; transform:translateY(10px); }
+to   { opacity:1; transform:translateY(0); }
+}
+.ex-card:nth-child(1) { animation-delay:.02s }
+.ex-card:nth-child(2) { animation-delay:.06s }
+.ex-card:nth-child(3) { animation-delay:.10s }
+.ex-card:nth-child(4) { animation-delay:.14s }
+.ex-card:nth-child(5) { animation-delay:.18s }
+.ex-card:nth-child(6) { animation-delay:.22s }
+.ex-card:nth-child(7) { animation-delay:.26s }
+.ex-card:nth-child(8) { animation-delay:.30s }
+
+/* type accent bar */
+.ex-card[data-type=“strength”]   { border-left: 3px solid var(–accent); }
+.ex-card[data-type=“power”]      { border-left: 3px solid #7BA7BC; }
+.ex-card[data-type=“plyo”]       { border-left: 3px solid #C4A35A; }
+.ex-card[data-type=“speed”]      { border-left: 3px solid #B07090; }
+.ex-card[data-type=“unilateral”] { border-left: 3px solid #7A9E7E; }
+.ex-card[data-type=“injury”]     { border-left: 3px solid #8AABE0; }
+.ex-card[data-type=“core”]       { border-left: 3px solid #A8A090; }
+
+/* ── EXERCISE HEADER ROW (tap to expand) ── */
+.ex-header {
+display: flex;
+align-items: center;
+gap: 12px;
+padding: 14px 14px 14px 16px;
+cursor: pointer;
+user-select: none;
+-webkit-tap-highlight-color: transparent;
+}
+.ex-num {
+font-family: var(–font-mono);
+font-size: 10px;
+font-weight: 500;
+color: var(–accent);
+background: var(–accent-pale);
+border-radius: 6px;
+padding: 3px 6px;
+min-width: 24px;
+text-align: center;
+flex-shrink: 0;
+}
+.ex-main { flex: 1; min-width: 0; }
+.ex-name {
+font-size: 15px;
+font-weight: 600;
+color: var(–text-1);
+line-height: 1.2;
+}
+.ex-card.done .ex-name {
+text-decoration: line-through;
+color: var(–text-3);
+}
+.ex-sub {
+font-size: 12px;
+color: var(–text-3);
+margin-top: 2px;
+}
+.ex-right {
+display: flex;
+align-items: center;
+gap: 8px;
+flex-shrink: 0;
+}
+.ex-last-weight {
+text-align: right;
+font-family: var(–font-mono);
+font-size: 11px;
+color: var(–text-3);
+}
+.ex-last-weight strong {
+display: block;
+font-size: 13px;
+color: var(–accent);
+font-weight: 600;
+}
+
+/* checkmark */
+.ex-check {
+width: 26px; height: 26px;
+border-radius: 50%;
+border: 2px solid var(–border-mid);
+background: var(–surface2);
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+transition: all .2s cubic-bezier(.34,1.56,.64,1);
+flex-shrink: 0;
+}
+.ex-check:active { transform: scale(.85); }
+.ex-check svg { width: 13px; height: 13px; opacity: 0; transition: opacity .15s; stroke: white; stroke-width: 2.5; }
+.ex-card.done .ex-check {
+background: var(–success);
+border-color: var(–success);
+}
+.ex-card.done .ex-check svg { opacity: 1; }
+.ex-card.done { opacity: .7; }
+
+/* chevron */
+.ex-chevron {
+width: 16px; height: 16px;
+color: var(–text-3);
+transition: transform .25s ease;
+flex-shrink: 0;
+}
+.ex-card.open .ex-chevron { transform: rotate(180deg); }
+
+/* ── DROPDOWN BODY ── */
+.ex-body {
+display: none;
+border-top: 1px solid var(–border);
+}
+.ex-card.open .ex-body { display: block; }
+
+/* how-to section */
+.ex-howto {
+padding: 14px 16px;
+background: var(–surface2);
+border-bottom: 1px solid var(–border);
+}
+.ex-howto-title {
+font-size: 10px;
+font-weight: 700;
+letter-spacing: 1.5px;
+text-transform: uppercase;
+color: var(–accent);
+margin-bottom: 8px;
+}
+.ex-howto p {
+font-size: 13px;
+color: var(–text-2);
+line-height: 1.65;
+}
+.ex-note-tip {
+display: flex;
+align-items: flex-start;
+gap: 7px;
+margin-top: 8px;
+background: var(–accent-pale);
+border-radius: 8px;
+padding: 8px 10px;
+font-size: 12px;
+color: var(–taupe);
+line-height: 1.5;
+}
+.ex-note-tip::before { content: ‘💡’; flex-shrink: 0; font-size: 13px; }
+
+/* log section */
+.ex-log {
+padding: 14px 16px 16px;
+}
+.ex-log-title {
+font-size: 10px;
+font-weight: 700;
+letter-spacing: 1.5px;
+text-transform: uppercase;
+color: var(–text-3);
+margin-bottom: 10px;
+}
+.log-set-row {
+display: grid;
+grid-template-columns: 28px 1fr 1fr;
+gap: 6px;
+align-items: center;
+margin-bottom: 6px;
+}
+.set-label {
+font-size: 11px;
+font-weight: 600;
+color: var(–text-3);
+text-align: center;
+}
+.set-input {
+background: var(–surface2);
+border: 1px solid var(–border-mid);
+border-radius: 8px;
+padding: 9px 8px;
+font-size: 14px;
+font-family: var(–font-mono);
+color: var(–text-1);
+text-align: center;
+width: 100%;
+-webkit-appearance: none;
+transition: border-color .15s;
+}
+.set-input::placeholder { color: var(–text-3); }
+.set-input:focus { outline: none; border-color: var(–accent); background: white; }
+.set-input-header {
+font-size: 9px;
+font-weight: 700;
+letter-spacing: 1px;
+text-transform: uppercase;
+color: var(–text-3);
+text-align: center;
+margin-bottom: 4px;
+}
+.log-headers {
+display: grid;
+grid-template-columns: 28px 1fr 1fr;
+gap: 6px;
+margin-bottom: 4px;
+}
+.add-set-btn {
+background: none;
+border: 1px dashed var(–border-mid);
+border-radius: 8px;
+padding: 8px;
+width: 100%;
+color: var(–text-3);
+font-size: 12px;
+font-family: var(–font-body);
+cursor: pointer;
+margin-top: 4px;
+transition: all .15s;
+}
+.add-set-btn:active { background: var(–surface2); }
+
+.proj-line {
+margin-top: 10px;
+padding: 8px 10px;
+background: var(–surface2);
+border-radius: 8px;
+font-size: 12px;
+color: var(–text-2);
+display: flex;
+align-items: center;
+gap: 6px;
+}
+.proj-line .proj-arrow { color: var(–accent); font-weight: 700; }
+.proj-ready {
+background: var(–success-bg);
+color: var(–success);
+}
+
+/* ── REST DAY ── */
+.rest-card {
+margin: 0 16px;
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 20px;
+padding: 40px 24px;
+text-align: center;
+}
+.rest-icon { font-size: 44px; margin-bottom: 12px; }
+.rest-card h2 {
+font-family: var(–font-display);
+font-size: 30px;
+color: var(–espresso);
+margin-bottom: 8px;
+}
+.rest-card p { color: var(–text-2); font-size: 14px; line-height: 1.6; }
+
+/* ── CALENDAR ── */
+.cal-month-nav {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 0 22px;
+margin-bottom: 12px;
+}
+.cal-month-nav h2 {
+font-family: var(–font-display);
+font-size: 24px;
+color: var(–espresso);
+}
+.month-btn {
+background: var(–surface);
+border: 1px solid var(–border-mid);
+border-radius: 10px;
+width: 34px; height: 34px;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+color: var(–text-1);
+font-size: 18px;
+transition: background .15s;
+}
+.month-btn:active { background: var(–parchment); }
+
+.cal-grid {
+display: grid;
+grid-template-columns: repeat(7,1fr);
+gap: 2px;
+padding: 0 16px;
+margin-bottom: 16px;
+}
+.cal-day-header {
+text-align: center;
+font-size: 10px;
+font-weight: 700;
+letter-spacing: 1px;
+color: var(–text-3);
+text-transform: uppercase;
+padding: 8px 0;
+}
+.cal-cell {
+aspect-ratio: 1;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 3px;
+border-radius: 10px;
+cursor: pointer;
+transition: background .15s;
+}
+.cal-cell:hover { background: var(–parchment); }
+.cal-cell.today { background: var(–espresso); }
+.cal-cell.today .cal-num { color: white; font-weight: 700; }
+.cal-cell.selected { background: var(–accent); }
+.cal-cell.selected .cal-num { color: white; font-weight: 700; }
+.cal-num { font-size: 13px; color: var(–text-1); }
+.cal-dot { width: 4px; height: 4px; border-radius: 50%; background: var(–accent); }
+.cal-cell.today .cal-dot { background: var(–accent-light); }
+.cal-cell.selected .cal-dot { background: white; }
+.cal-cell.future .cal-num { color: var(–text-3); }
+.cal-cell.empty { pointer-events: none; }
+
+.cal-detail {
+margin: 0 16px 16px;
+background: var(–surface);
+border: 1px solid var(–border-mid);
+border-radius: var(–radius);
+padding: 18px;
+animation: fadeIn .2s ease;
+}
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+.cal-detail h3 {
+font-family: var(–font-display);
+font-size: 24px;
+color: var(–espresso);
+margin-bottom: 4px;
+}
+.cal-tag {
+display: inline-block;
+font-size: 10px;
+font-weight: 700;
+letter-spacing: 1.2px;
+text-transform: uppercase;
+background: var(–accent-pale);
+color: var(–accent);
+border-radius: 99px;
+padding: 4px 12px;
+margin-bottom: 14px;
+}
+.lift-row {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 9px 0;
+border-bottom: 1px solid var(–border);
+}
+.lift-row:last-child { border-bottom: none; }
+.lift-name { font-size: 14px; color: var(–text-1); }
+.lift-val { font-family: var(–font-mono); font-size: 13px; color: var(–accent); font-weight: 600; }
+.lift-proj { font-size: 11px; color: var(–text-3); text-align: right; }
+
+/* ── SETTINGS ── */
+.settings-section {
+margin: 0 16px 14px;
+background: var(–surface);
+border: 1px solid var(–border-mid);
+border-radius: var(–radius);
+overflow: hidden;
+}
+.settings-row {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 15px 16px;
+border-bottom: 1px solid var(–border);
+}
+.settings-row:last-child { border-bottom: none; }
+.settings-label { font-size: 15px; color: var(–text-1); font-weight: 500; }
+.settings-sub { font-size: 12px; color: var(–text-3); margin-top: 2px; }
+.time-input {
+background: var(–surface2);
+border: 1px solid var(–border-mid);
+border-radius: 8px;
+padding: 7px 11px;
+font-size: 15px;
+color: var(–text-1);
+font-family: var(–font-mono);
+}
+.time-input:focus { outline: none; border-color: var(–accent); }
+
+.toggle-wrapper {
+width: 48px; height: 27px;
+border-radius: 99px;
+background: var(–parchment);
+border: 1px solid var(–border-mid);
+position: relative;
+cursor: pointer;
+transition: background .2s;
+flex-shrink: 0;
+}
+.toggle-wrapper.on { background: var(–accent); border-color: var(–accent); }
+.toggle-knob {
+position: absolute;
+width: 21px; height: 21px;
+border-radius: 50%;
+background: white;
+top: 2px; left: 2px;
+transition: transform .2s cubic-bezier(.34,1.56,.64,1);
+box-shadow: 0 1px 4px rgba(0,0,0,.15);
+}
+.toggle-wrapper.on .toggle-knob { transform: translateX(21px); }
+.notif-status { font-size: 12px; color: var(–accent); padding: 6px 16px 12px; }
+.notif-status.denied { color: #c05050; }
+
+.stats-row { display: flex; gap: 10px; padding: 0 16px; margin-bottom: 14px; }
+.stat-card {
+flex: 1;
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: var(–radius-sm);
+padding: 14px 10px;
+text-align: center;
+}
+.stat-num {
+font-family: var(–font-display);
+font-size: 32px;
+color: var(–espresso);
+line-height: 1;
+}
+.stat-lbl {
+font-size: 10px;
+font-weight: 700;
+color: var(–text-3);
+text-transform: uppercase;
+letter-spacing: 1px;
+margin-top: 3px;
+}
+
+/* ── TOAST ── */
+.toast {
+position: fixed;
+top: 20px; left: 50%;
+transform: translateX(-50%) translateY(-80px);
+background: var(–espresso);
+color: white;
+font-weight: 600;
+font-size: 13px;
+padding: 10px 20px;
+border-radius: 99px;
+z-index: 200;
+transition: transform .4s cubic-bezier(.34,1.56,.64,1);
+white-space: nowrap;
+pointer-events: none;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+.empty-state { text-align: center; padding: 36px 24px; color: var(–text-3); font-size: 14px; }
+
+/* ── WARM-UP SECTION ── */
+.warmup-section {
+margin: 0 16px 16px;
+background: var(–surface);
+border: 1px solid var(–border);
+border-left: 3px solid #7BA7BC;
+border-radius: var(–radius);
+overflow: hidden;
+}
+.warmup-header {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 13px 16px;
+cursor: pointer;
+user-select: none;
+-webkit-tap-highlight-color: transparent;
+}
+.warmup-title {
+font-size: 13px;
+font-weight: 700;
+color: #5A8AAA;
+letter-spacing: .5px;
+text-transform: uppercase;
+}
+.warmup-sub {
+font-size: 12px;
+color: var(–text-3);
+margin-top: 1px;
+}
+.warmup-body {
+display: none;
+border-top: 1px solid var(–border);
+}
+.warmup-section.open .warmup-body { display: block; }
+.warmup-section.open .ex-chevron { transform: rotate(180deg); }
+.warmup-exercise {
+padding: 12px 16px;
+border-bottom: 1px solid var(–border);
+}
+.warmup-exercise:last-child { border-bottom: none; }
+.warmup-ex-name {
+font-size: 14px;
+font-weight: 600;
+color: var(–text-1);
+margin-bottom: 2px;
+}
+.warmup-ex-sub { font-size: 12px; color: var(–text-3); margin-bottom: 6px; }
+.warmup-ex-howto {
+font-size: 13px;
+color: var(–text-2);
+line-height: 1.6;
+}
+</style>
+
+</head>
+<body>
+<div id="app">
+
+  <!-- TODAY -->
+
+  <div class="screen active" id="screen-today">
+    <div class="scroll-area">
+      <div class="page-header">
+        <div class="eyebrow">Good to see you</div>
+        <h1 id="today-heading">Today</h1>
+      </div>
+      <div class="hero-card" id="hero-card">
+        <div class="hero-day-name" id="hero-day-name">—</div>
+        <div class="hero-category" id="hero-category">—</div>
+        <div class="hero-date" id="hero-date">—</div>
+        <div class="hero-badge">
+          <div class="hero-badge-dot"></div>
+          <span id="hero-badge-text">Loading</span>
+        </div>
+        <div class="hero-progress" id="hero-progress" style="display:none">
+          <div class="hero-prog-bar"><div class="hero-prog-fill" id="hero-prog-fill"></div></div>
+          <div class="hero-prog-label" id="hero-prog-label"></div>
+        </div>
+      </div>
+      <div class="section-label" id="today-section-label" style="margin-top:4px">Exercises</div>
+      <div class="exercise-list" id="exercise-list"></div>
+    </div>
+  </div>
+
+  <!-- CALENDAR -->
+
+  <div class="screen" id="screen-calendar">
+    <div class="scroll-area">
+      <div class="page-header">
+        <div class="eyebrow">Your history</div>
+        <h1>Calendar</h1>
+      </div>
+      <div class="cal-month-nav">
+        <button class="month-btn" id="prev-month">‹</button>
+        <h2 id="cal-month-label">—</h2>
+        <button class="month-btn" id="next-month">›</button>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+      <div id="cal-detail-panel"></div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+
+  <div class="screen" id="screen-settings">
+    <div class="scroll-area">
+      <div class="page-header">
+        <div class="eyebrow">Lift Tracker</div>
+        <h1>Settings</h1>
+      </div>
+
+```
+  <div class="section-label" style="margin-bottom:10px">This Week</div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-num" id="stat-streak">0</div><div class="stat-lbl">Streak</div></div>
+    <div class="stat-card"><div class="stat-num" id="stat-week">0</div><div class="stat-lbl">This Week</div></div>
+    <div class="stat-card"><div class="stat-num" id="stat-total">0</div><div class="stat-lbl">Total</div></div>
+  </div>
+
+  <div class="section-label" style="margin-bottom:10px">Notifications</div>
+  <div class="settings-section">
+    <div class="settings-row">
+      <div>
+        <div class="settings-label">Daily Reminder</div>
+        <div class="settings-sub">Get notified with today's workout</div>
+      </div>
+      <div class="toggle-wrapper" id="notif-toggle"><div class="toggle-knob"></div></div>
+    </div>
+    <div class="settings-row">
+      <div class="settings-label">Reminder Time</div>
+      <input type="time" class="time-input" id="notif-time" value="08:00"/>
+    </div>
+    <div class="notif-status" id="notif-status">Tap toggle to enable</div>
+  </div>
+
+  <div class="section-label" style="margin-bottom:10px">About</div>
+  <div class="settings-section">
+    <div class="settings-row">
+      <div>
+        <div class="settings-label">Lift Tracker</div>
+        <div class="settings-sub">Smart progressive overload • v2.0</div>
+      </div>
+    </div>
+    <div class="settings-row">
+      <div class="settings-label">Clear All Data</div>
+      <button onclick="clearData()" style="background:none;border:1px solid rgba(192,80,80,.3);border-radius:8px;padding:6px 12px;color:#c05050;font-size:12px;font-family:var(--font-body);cursor:pointer;">Reset</button>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- NAV -->
+
+  <nav>
+    <button class="nav-btn active" data-screen="today">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+      Today
+      <div class="nav-indicator"></div>
+    </button>
+    <button class="nav-btn" data-screen="calendar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+      </svg>
+      Calendar
+      <div class="nav-indicator"></div>
+    </button>
+    <button class="nav-btn" data-screen="settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+      </svg>
+      Settings
+      <div class="nav-indicator"></div>
+    </button>
+  </nav>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// SCHEDULE
+// Sun=0 Mon=1 Tue=2 Wed=3 Thu=4 Fri=5 Sat=6
+// ═══════════════════════════════════════════
+
+// Warm-up shown at top of every leg/jump day
+const WARMUP = [
+  { name: 'Jump Rope', sets: 1, reps: null, type: 'warmup',
+    howto: 'Jump at a comfortable pace, staying on the balls of your feet. Keep your elbows close to your sides and use small wrist circles to turn the rope. This raises your heart rate and primes your calves and ankles.',
+    note: '2 minutes continuous. Easy pace — this is activation, not cardio.' },
+  { name: 'Walking Lunges', sets: 1, reps: 12, type: 'warmup',
+    howto: 'Step forward into a lunge, lowering your back knee toward the floor. Push through your front heel to step through into the next lunge. Keep your torso upright and your front knee behind your toes.',
+    note: '12 each leg. Take your time — full range of motion.' },
+  { name: 'Leg Swings', sets: 1, reps: 15, type: 'warmup',
+    howto: 'Stand on one foot, holding a wall for balance. Swing your free leg forward and back in a controlled arc, gradually increasing the range. Then switch to side-to-side swings. Keep the movement relaxed.',
+    note: '15 each direction, each leg.' },
+  { name: 'Pogo Jumps (warm-up)', sets: 3, reps: 25, type: 'warmup',
+    howto: 'Bounce on the balls of your feet with minimal knee bend. Keep contacts short and springy — think of the ground as hot. Arms stay relatively still. This primes your elastic energy system.',
+    note: '3 sets of 25. Light and fast — not high.' },
+  { name: 'Squat Jumps (warm-up)', sets: 3, reps: 5, type: 'warmup',
+    howto: 'Descend into a squat, then explode upward as high as possible. Land softly through your toes then heels, absorbing the impact with bent knees. Reset fully before the next rep.',
+    note: '3 sets of 5. Each one should be near-maximal effort.' },
+];
+
+const SCHEDULE = {
+  // Sunday — Push
+  0: {
+    name: 'Push', category: 'Chest / Shoulders / Triceps', bodyPart: 'upper',
+    warmup: false,
+    exercises: [
+      { name: 'Dumbbell Bench Press', sets: 4, reps: 8, type: 'strength',
+        howto: 'Lie on a bench with dumbbells at chest height, elbows at about 45° from your torso. Press up and slightly in, bringing the dumbbells close together at the top without touching. Lower slowly over 2–3 seconds, feeling a stretch in your chest.',
+        note: 'Target 5–8 reps. If you hit 8 on every set with clean form, you\'re ready to go heavier next week.' },
+      { name: 'Single-Arm KB Overhead Press', sets: 4, reps: 6, type: 'strength',
+        howto: 'Hold a kettlebell in one hand at shoulder height, palm facing in. Press straight up until your arm is fully extended overhead. Lower with control. Keep your core braced and avoid leaning to the side.',
+        note: '6 each arm. The single-arm version challenges your core much more than bilateral pressing.' },
+      { name: 'Deficit Push-Ups', sets: 3, reps: 10, type: 'strength',
+        howto: 'Place each hand on a dumbbell handle so your chest can descend below hand height. Lower slowly until your chest is below your hands, then press back up. This increases range of motion and pectoral stretch.',
+        note: 'Hands on dumbbells. Keep elbows at 45° — not flared wide.' },
+      { name: 'Dumbbell Floor Press', sets: 3, reps: 8, type: 'strength',
+        howto: 'Lie on the floor with dumbbells at chest height. Press up until arms are extended, then lower until your upper arms rest on the floor — pause briefly, then press again. The floor limits range and removes leg drive.',
+        note: 'The pause at the bottom makes this harder than it looks. Great for tricep lockout strength.' },
+      { name: 'Band Triceps Pushdowns', sets: 3, reps: 12, type: 'strength',
+        howto: 'Anchor a band overhead. Grip the band with both hands and press down until your arms are fully extended, keeping your elbows locked at your sides. Squeeze at the bottom, then let the band pull your hands back up slowly.',
+        note: 'Keep your upper arms still throughout — only your forearms move.' },
+      { name: 'Farmer Carry (KB)', sets: 4, reps: null, type: 'core',
+        howto: 'Pick up two heavy kettlebells with a strong grip. Stand tall, brace your core, pack your shoulders down and back. Walk with purpose — short, controlled steps. Don\'t let the weight pull you into a lean.',
+        note: '30 seconds per set. Go as heavy as you can while maintaining perfect posture.' },
+    ]
+  },
+  // Monday — Pull
+  1: {
+    name: 'Pull', category: 'Back / Biceps / Grip', bodyPart: 'upper',
+    warmup: false,
+    exercises: [
+      { name: 'Single-Arm DB Row', sets: 4, reps: 8, type: 'strength',
+        howto: 'Brace one knee and hand on a bench. Hold a dumbbell in the free hand, arm extended straight down. Row toward your hip — not your ear — squeezing your lat at the top. Lower fully before the next rep.',
+        note: '6–8 each arm. Think about pulling with your elbow, not your hand.' },
+      { name: 'KB Gorilla Rows', sets: 4, reps: 8, type: 'strength',
+        howto: 'Place two kettlebells on the floor, shoulder-width apart. Hinge over them with a flat back, gripping both handles. Row one kettlebell up while the other stays planted as a balance point, then alternate.',
+        note: 'Keep your hips square — don\'t rotate. Brace hard through your whole core.' },
+      { name: 'Band Face Pulls', sets: 3, reps: 15, type: 'injury',
+        howto: 'Anchor a band at face height. Pull toward your face, driving your elbows back and out wide. Finish with your hands beside your ears, squeezing your rear delts and upper back. Return slowly.',
+        note: 'This protects your shoulder health. Never skip it — it counterbalances all the pressing you do.' },
+      { name: 'Dumbbell Hammer Curls', sets: 3, reps: 8, type: 'unilateral',
+        howto: 'Hold dumbbells with palms facing each other. Curl both (or alternating) arms up, maintaining the neutral grip throughout. This hits the brachialis and forearms more than a standard curl.',
+        note: 'Full range — fully extend at the bottom, squeeze hard at the top.' },
+      { name: 'Rear Delt Raises', sets: 3, reps: 12, type: 'injury',
+        howto: 'Hinge forward at the hips, back flat, holding light dumbbells. Raise both arms out to the sides with a slight bend at the elbow, squeezing the back of your shoulders at the top. Lower slowly.',
+        note: 'Very light weight. Controlling the lowering phase is as important as the raise itself.' },
+      { name: 'Suitcase Carry (KB)', sets: 4, reps: null, type: 'core',
+        howto: 'Hold one kettlebell in one hand at your side — like a suitcase. Stand tall and walk, resisting the urge to lean toward the weight. Your goal is to look like you\'re carrying nothing.',
+        note: '30 seconds each side per set. This trains lateral core stability that nothing else does.' },
+    ]
+  },
+  // Tuesday — Legs (Power + Strength)
+  2: {
+    name: 'Legs', category: 'Power + Strength', bodyPart: 'lower',
+    warmup: true,
+    exercises: [
+      { name: 'Depth Drops → Vertical Jump', sets: 5, reps: 3, type: 'plyo',
+        howto: 'Step off a low box (6–12 inches) — don\'t jump off. The moment both feet hit the ground, immediately explode upward as high as possible. The drop loads your muscles eccentrically so you can produce more force on the jump.',
+        note: 'The key is minimal ground contact time. Step off, hit, and go — don\'t pause on landing.' },
+      { name: 'DB Bulgarian Split Squats', sets: 4, reps: 6, type: 'unilateral',
+        howto: 'Hold dumbbells at your sides. Rear foot elevated on a bench, front foot out far enough that your shin stays vertical when you descend. Lower your back knee toward the floor, then drive through your front heel to stand.',
+        note: '6 each leg. One of the best single-leg strength exercises. Stay patient with the balance — it comes.' },
+      { name: 'Kettlebell Swings', sets: 5, reps: 8, type: 'power',
+        howto: 'Hinge at the hips — not squat — pushing them back as the KB swings between your legs. Drive your hips forward explosively to swing the KB to chest height. Let it fall back and hinge again. The power comes from your hips, not your arms.',
+        note: 'This is a hip hinge, not a squat. If your knees are bending deeply, you\'re squatting it — fix that.' },
+      { name: 'Band-Resisted Jumps', sets: 4, reps: 5, type: 'power',
+        howto: 'Anchor a resistance band around your waist (or have a partner hold it behind you). Squat down and jump as explosively as possible against the band\'s resistance. Land softly, reset, and repeat.',
+        note: 'The band forces you to produce more force to jump the same height. Reset fully between reps.' },
+      { name: 'Single-Leg Bench Jumps', sets: 4, reps: 3, type: 'plyo',
+        howto: 'Stand on one leg in front of a bench or low box. Load your hip and jump up onto the bench with one leg. Step or land softly, step back down, and repeat. Focus on a powerful single push through your whole foot.',
+        note: '3 each leg per set. Don\'t rush — quality of push-off matters more than speed between reps.' },
+    ]
+  },
+  // Wednesday — Push
+  3: {
+    name: 'Push', category: 'Chest / Shoulders / Triceps', bodyPart: 'upper',
+    warmup: false,
+    exercises: [
+      { name: 'Dumbbell Bench Press', sets: 4, reps: 8, type: 'strength',
+        howto: 'Lie on a bench with dumbbells at chest height, elbows at about 45° from your torso. Press up and slightly in, bringing the dumbbells close together at the top. Lower slowly over 2–3 seconds, feeling a stretch in your chest.',
+        note: 'Target 5–8 reps. If you hit 8 on every set cleanly, go heavier next week.' },
+      { name: 'Single-Arm KB Overhead Press', sets: 4, reps: 6, type: 'strength',
+        howto: 'Hold a kettlebell in one hand at shoulder height, palm facing in. Press straight up until your arm is fully extended overhead. Lower with control. Keep your core braced and avoid leaning to the side.',
+        note: '6 each arm. The single-arm version challenges your core far more than bilateral pressing.' },
+      { name: 'Deficit Push-Ups', sets: 3, reps: 10, type: 'strength',
+        howto: 'Place each hand on a dumbbell handle. Lower until your chest descends below your hands, then press back up. This increases range of motion and pectoral stretch significantly.',
+        note: 'Keep elbows at 45° — not flared wide. Slow on the way down.' },
+      { name: 'Dumbbell Floor Press', sets: 3, reps: 8, type: 'strength',
+        howto: 'Lie on the floor with dumbbells at chest height. Press up until arms are extended, then lower until your upper arms rest on the floor. Pause briefly, then press again.',
+        note: 'The pause at the bottom eliminates stretch-reflex and builds real pressing strength.' },
+      { name: 'Band Triceps Pushdowns', sets: 3, reps: 12, type: 'strength',
+        howto: 'Anchor a band overhead. Grip with both hands and press down until arms are fully extended, elbows locked at your sides. Squeeze at the bottom, then let the band slowly pull your hands back up.',
+        note: 'Upper arms don\'t move — only your forearms.' },
+      { name: 'Farmer Carry (KB)', sets: 4, reps: null, type: 'core',
+        howto: 'Pick up two heavy kettlebells. Stand tall, core braced, shoulders packed. Walk with controlled steps — don\'t let the weight pull you into a lean or shrug.',
+        note: '30 seconds per set. Heavier than you think you can handle.' },
+    ]
+  },
+  // Thursday — Pull
+  4: {
+    name: 'Pull', category: 'Back / Biceps / Grip', bodyPart: 'upper',
+    warmup: false,
+    exercises: [
+      { name: 'Single-Arm DB Row', sets: 4, reps: 8, type: 'strength',
+        howto: 'Brace one knee and hand on a bench. Row toward your hip, squeezing your lat at the top. Lower fully before the next rep.',
+        note: '6–8 each arm. Pull with your elbow, not your hand.' },
+      { name: 'KB Gorilla Rows', sets: 4, reps: 8, type: 'strength',
+        howto: 'Two kettlebells on the floor, shoulder-width. Hinge over with a flat back. Row one while the other stays as your balance point, then alternate.',
+        note: 'Hips stay square. Core braced throughout.' },
+      { name: 'Band Face Pulls', sets: 3, reps: 15, type: 'injury',
+        howto: 'Anchor a band at face height. Pull toward your face driving elbows back and out wide. Finish with hands beside your ears, squeezing rear delts. Return slowly.',
+        note: 'Never skip this. It protects your shoulder health long-term.' },
+      { name: 'Dumbbell Hammer Curls', sets: 3, reps: 8, type: 'unilateral',
+        howto: 'Palms facing each other throughout the curl. Full range — fully extend at the bottom, squeeze hard at the top.',
+        note: null },
+      { name: 'Rear Delt Raises', sets: 3, reps: 12, type: 'injury',
+        howto: 'Hinged forward, flat back, light dumbbells. Raise out to the sides squeezing rear delts. Lower with control.',
+        note: 'Light weight. The lowering matters as much as the raise.' },
+      { name: 'Suitcase Carry (KB)', sets: 4, reps: null, type: 'core',
+        howto: 'One kettlebell at your side. Stand tall, resist the lean. Walk looking like you\'re carrying nothing.',
+        note: '30 seconds each side. The best lateral core stability exercise there is.' },
+    ]
+  },
+  // Friday — Legs (Elasticity + Speed)
+  5: {
+    name: 'Legs', category: 'Elasticity + Speed', bodyPart: 'lower',
+    warmup: true,
+    exercises: [
+      { name: 'Pogo Jumps', sets: 4, reps: 30, type: 'plyo',
+        howto: 'Bounce on the balls of your feet with minimal knee bend. Keep ground contact time as short as possible — think of the floor as hot. Arms stay relatively quiet. Stay rhythmic and springy.',
+        note: '4 sets of 30 contacts. Light and fast. This trains your tendons, not just your muscles.' },
+      { name: 'Max Approach Jumps', sets: 6, reps: 2, type: 'plyo',
+        howto: 'Take a 3–5 step approach at game speed, plant your foot, and jump as high as you can — exactly as you would in a game. This is not a practice drill. Treat every jump like it counts.',
+        note: '6 sets of 2 jumps. Full recovery between sets (2–3 min). Quality over quantity.' },
+      { name: 'DB Jump Squats', sets: 5, reps: 5, type: 'power',
+        howto: 'Hold light dumbbells at your sides. Descend into a squat, then explode upward as fast as possible. Land softly through your toes then heels. Reset fully — stand up, breathe, then go again.',
+        note: 'Light weight, maximum intent. Each jump should be all-out effort.' },
+      { name: 'Heavy Goblet Squats', sets: 4, reps: 6, type: 'strength',
+        howto: 'Hold a heavy kettlebell at chest height with both hands under the bell. Squat deep, keeping your chest tall and knees tracking your toes. Drive through your full foot to stand, squeezing glutes at the top.',
+        note: 'Go heavy. This is your main strength work for the day.' },
+      { name: 'Bounds', sets: 4, reps: null, type: 'plyo',
+        howto: 'Run and leap from one foot to the other in exaggerated bounding strides. Drive your knee up on each bound, spend as little time on the ground as possible, and cover as much ground as you can per stride.',
+        note: '4 sets of 20 meters. Think long and powerful, not fast. This builds the elastic force you use in a jump.' },
+    ]
+  },
+  // Saturday — Rest
+  6: { name: 'Rest', category: 'Rest & Recovery', bodyPart: null, warmup: false, exercises: [] },
+};
+
+// ═══════════════════════════════════════════
+// WEIGHT PROGRESSIONS
+// ═══════════════════════════════════════════
+const UPPER_WEIGHTS = [6,12,15,20,25,35,40,50,60,70];
+const LOWER_WEIGHTS = [6,12,15,20,25,35,40,50,60,70];
+const KB_WEIGHTS    = [9,13,18,26,35,44,53,62,70];  // standard KB sizes in lbs (4,6,8,12,16,20,24,28,32kg)
+const UPPER_JUMP = 2.5;
+const LOWER_JUMP = 5;
+
+// Exercises that use kettlebells — snap to KB sizes
+const KB_EXERCISES = new Set([
+  'Kettlebell Swings','Single-Arm KB Overhead Press','KB Gorilla Rows',
+  'Suitcase Carry (KB)','Farmer Carry (KB)','Heavy Goblet Squats'
+]);
+
+function getWeightList(exName, bodyPart) {
+  if (KB_EXERCISES.has(exName)) return KB_WEIGHTS;
+  return bodyPart === 'lower' ? LOWER_WEIGHTS : UPPER_WEIGHTS;
+}
+
+function snapToValid(weight, exName, bodyPart) {
+  const list = getWeightList(exName, bodyPart);
+  let closest = list[0];
+  for (const w of list) {
+    if (Math.abs(w - weight) < Math.abs(closest - weight)) closest = w;
+  }
+  return closest;
+}
+
+function nextWeight(currentWeight, exName, bodyPart) {
+  const list = getWeightList(exName, bodyPart);
+  const jump = bodyPart === 'lower' ? LOWER_JUMP : UPPER_JUMP;
+  const target = currentWeight + jump;
+  for (const w of list) {
+    if (w >= target) return w;
+  }
+  return list[list.length - 1];
+}
+
+// Check if an exercise is ready to progress:
+// all sets must have hit the max reps for that exercise
+function isReadyToProgress(exName, dow, logEntry) {
+  if (!logEntry || !logEntry[exName]) return false;
+  const ex = SCHEDULE[dow].exercises.find(e => e.name === exName);
+  if (!ex || !ex.reps) return false;
+  const sets = logEntry[exName];
+  if (sets.length < ex.sets) return false;
+  return sets.every(s => parseInt(s.reps) >= ex.reps);
+}
+
+// Get the last logged weight for an exercise (searching backwards through history)
+function getLastWeight(exName, excludeKey) {
+  const keys = Object.keys(state.data).sort().reverse();
+  for (const k of keys) {
+    if (k === excludeKey) continue;
+    const entry = state.data[k];
+    if (entry && entry[exName]) {
+      const maxW = Math.max(...entry[exName].map(s => parseFloat(s.weight)||0));
+      if (maxW > 0) return maxW;
+    }
+  }
+  return null;
+}
+
+// Get projection for next session — only increase if last session hit all reps
+function getProjection(exName, dow, todayKey) {
+  const bodyPart = SCHEDULE[dow].bodyPart;
+  if (!bodyPart) return null;
+
+  // Find the most recent log for this exercise (before today)
+  const keys = Object.keys(state.data).sort().reverse();
+  let lastKey = null;
+  let lastWeight = null;
+  for (const k of keys) {
+    if (k === todayKey) continue;
+    const entry = state.data[k];
+    if (entry && entry[exName]) {
+      const maxW = Math.max(...entry[exName].map(s => parseFloat(s.weight)||0));
+      if (maxW > 0) { lastKey = k; lastWeight = maxW; break; }
+    }
+  }
+  if (!lastWeight) return null;
+
+  // Determine the dow of that last log to check readiness
+  const lastDow = new Date(lastKey + 'T12:00:00').getDay();
+  const lastEntry = state.data[lastKey];
+  const ready = isReadyToProgress(exName, lastDow, lastEntry);
+
+  if (ready) {
+    return { weight: nextWeight(lastWeight, exName, bodyPart), ready: true };
+  } else {
+    return { weight: snapToValid(lastWeight, exName, bodyPart), ready: false };
+  }
+}
+
+// ═══════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════
+function loadData()     { try { return JSON.parse(localStorage.getItem('lt_data') || '{}'); } catch { return {}; } }
+function saveData(d)    { localStorage.setItem('lt_data', JSON.stringify(d)); }
+function loadSettings() { try { return JSON.parse(localStorage.getItem('lt_settings') || '{}'); } catch { return {}; } }
+function saveSettings(s){ localStorage.setItem('lt_settings', JSON.stringify(s)); }
+function loadChecked()  { try { return JSON.parse(localStorage.getItem('lt_checked') || '{}'); } catch { return {}; } }
+function saveChecked(c) { localStorage.setItem('lt_checked', JSON.stringify(c)); }
+
+function dateKey(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+const state = {
+  today: new Date(),
+  calMonth: new Date(),
+  calSelected: null,
+  data: loadData(),
+  settings: loadSettings(),
+};
+
+// ═══════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const s = btn.dataset.screen;
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.screen').forEach(sc => sc.classList.remove('active'));
+    document.getElementById('screen-' + s).classList.add('active');
+    if (s === 'calendar') renderCalendar();
+    if (s === 'settings') renderSettings();
+  });
+});
+
+// ═══════════════════════════════════════════
+// TODAY
+// ═══════════════════════════════════════════
+function renderToday() {
+  // Clear any old warm-up block
+  const old = document.getElementById('warmup-block');
+  if (old) old.remove();
+
+  const today = state.today;
+  const dow   = today.getDay();
+  const sched = SCHEDULE[dow];
+  const DAYS  = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const MONTHS= ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  document.getElementById('today-heading').textContent = DAYS[dow];
+  document.getElementById('hero-day-name').textContent = DAYS[dow];
+  document.getElementById('hero-category').textContent = sched.category;
+  document.getElementById('hero-date').textContent     = `${MONTHS[today.getMonth()]} ${today.getDate()}, ${today.getFullYear()}`;
+  document.getElementById('hero-badge-text').textContent = sched.name + ' Day';
+
+  const list  = document.getElementById('exercise-list');
+  const label = document.getElementById('today-section-label');
+
+  if (!sched.exercises.length) {
+    label.style.display = 'none';
+    document.getElementById('hero-progress').style.display = 'none';
+    list.innerHTML = `<div class="rest-card"><div class="rest-icon">🌿</div><h2>Rest Day</h2><p>Recovery is part of the process.<br>Hydrate, sleep well, come back strong.</p></div>`;
+    return;
+  }
+
+  label.style.display = 'block';
+  const todayKey = dateKey(today);
+  const checked  = loadChecked();
+  const todayChecked = checked[todayKey] || {};
+
+  // Warm-up block for leg days
+  let warmupHTML = '';
+  if (sched.warmup) {
+    warmupHTML = `<div class="warmup-section" id="warmup-block">
+      <div class="warmup-header" onclick="document.getElementById('warmup-block').classList.toggle('open')">
+        <div>
+          <div class="warmup-title">🔥 Warm-Up First</div>
+          <div class="warmup-sub">Jump rope · lunges · leg swings · pogos · squat jumps</div>
+        </div>
+        <svg class="ex-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </div>
+      <div class="warmup-body">
+        ${WARMUP.map(w => `<div class="warmup-exercise">
+          <div class="warmup-ex-name">${w.name}</div>
+          <div class="warmup-ex-sub">${w.reps ? `${w.sets > 1 ? w.sets+'×' : ''}${w.reps} reps` : `${w.sets} set${w.sets>1?'s':''}`}</div>
+          <div class="warmup-ex-howto">${w.howto}</div>
+          ${w.note ? `<div class="ex-note-tip" style="margin-top:6px">${w.note}</div>` : ''}
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  // Insert warm-up before exercise list
+  const listEl = document.getElementById('exercise-list');
+  listEl.insertAdjacentHTML('beforebegin', warmupHTML);
+
+  list.innerHTML = sched.exercises.map((ex, i) => {
+    const lastW = getLastWeight(ex.name, todayKey);
+    const proj  = getProjection(ex.name, dow, todayKey);
+    const isDone = !!todayChecked[ex.name];
+    const logEntry = state.data[todayKey];
+    const todayW = logEntry && logEntry[ex.name]
+      ? Math.max(...logEntry[ex.name].map(s => parseFloat(s.weight)||0)) || null
+      : null;
+
+    const numStr = String(i+1).padStart(2,'0');
+    const repsStr = ex.reps ? `${ex.sets} × ${ex.reps} reps` : `${ex.sets} sets`;
+
+    // Build set rows for log section
+    const numSets = ex.sets;
+    const existingSets = logEntry && logEntry[ex.name] ? logEntry[ex.name] : [];
+    let setRowsHTML = `<div class="log-headers">
+      <div></div>
+      <div class="set-input-header">Weight (lbs)</div>
+      <div class="set-input-header">Reps</div>
+    </div>`;
+    for (let si = 0; si < numSets; si++) {
+      const existing = existingSets[si] || {};
+      setRowsHTML += `<div class="log-set-row">
+        <div class="set-label">S${si+1}</div>
+        <div><input class="set-input" type="number" inputmode="decimal" placeholder="lbs"
+          data-ex="${i}" data-set="${si}" data-field="weight" value="${existing.weight||''}"/></div>
+        <div><input class="set-input" type="number" inputmode="numeric" placeholder="${ex.reps||'—'}"
+          data-ex="${i}" data-set="${si}" data-field="reps" value="${existing.reps||''}"/></div>
+      </div>`;
+    }
+
+    // Projection line
+    let projHTML = '';
+    if (proj) {
+      if (proj.ready) {
+        projHTML = `<div class="proj-line proj-ready">✦ Ready to progress — try <strong>${proj.weight} lbs</strong> next session</div>`;
+      } else {
+        projHTML = `<div class="proj-line">
+          <span class="proj-arrow">→</span> Stay at <strong>${proj.weight} lbs</strong> — hit all reps first
+        </div>`;
+      }
+    }
+
+    return `<div class="ex-card${isDone?' done':''}" data-type="${ex.type}" data-ex-name="${ex.name.replace(/"/g,'&quot;')}" id="excard-${i}">
+      <div class="ex-header" onclick="toggleExpand(${i})">
+        <div class="ex-num">${numStr}</div>
+        <div class="ex-main">
+          <div class="ex-name">${ex.name}</div>
+          <div class="ex-sub">${repsStr}</div>
+        </div>
+        <div class="ex-right">
+          <div class="ex-last-weight">
+            ${todayW
+              ? `<strong>${todayW} lbs</strong><span>today</span>`
+              : lastW
+                ? `<strong>${lastW} lbs</strong><span>last time</span>`
+                : `<strong>—</strong>`}
+          </div>
+          <div class="ex-check" onclick="event.stopPropagation(); toggleCheck('${ex.name.replace(/'/g,"\\'")}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+          <svg class="ex-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </div>
+      </div>
+      <div class="ex-body">
+        <div class="ex-howto">
+          <div class="ex-howto-title">How to do it</div>
+          <p>${ex.howto}</p>
+          ${ex.note ? `<div class="ex-note-tip">${ex.note}</div>` : ''}
+        </div>
+        <div class="ex-log">
+          <div class="ex-log-title">Log your sets</div>
+          <div id="sets-container-${i}">
+            ${setRowsHTML}
+          </div>
+          <button class="add-set-btn" onclick="addSet(${i}, '${ex.reps||''}')">+ Add set</button>
+          ${projHTML}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Auto-save on any input change
+  document.querySelectorAll('.set-input').forEach(inp => {
+    inp.addEventListener('input', () => autoSaveLog());
+  });
+
+  updateProgress();
+}
+
+function toggleExpand(i) {
+  const card = document.getElementById(`excard-${i}`);
+  card.classList.toggle('open');
+}
+
+function addSet(ei, defaultReps) {
+  const container = document.getElementById(`sets-container-${ei}`);
+  const existing  = container.querySelectorAll('.log-set-row').length;
+  const row = document.createElement('div');
+  row.className = 'log-set-row';
+  row.innerHTML = `
+    <div class="set-label">S${existing+1}</div>
+    <div><input class="set-input" type="number" inputmode="decimal" placeholder="lbs"
+      data-ex="${ei}" data-set="${existing}" data-field="weight"/></div>
+    <div><input class="set-input" type="number" inputmode="numeric" placeholder="${defaultReps||'—'}"
+      data-ex="${ei}" data-set="${existing}" data-field="reps"/></div>`;
+  container.appendChild(row);
+  row.querySelectorAll('.set-input').forEach(inp => {
+    inp.addEventListener('input', () => autoSaveLog());
+  });
+}
+
+function autoSaveLog() {
+  const dow   = state.today.getDay();
+  const sched = SCHEDULE[dow];
+  const todayKey = dateKey(state.today);
+  const entry = state.data[todayKey] || {};
+
+  document.querySelectorAll('.set-input').forEach(inp => {
+    const ei    = parseInt(inp.dataset.ex);
+    const si    = parseInt(inp.dataset.set);
+    const field = inp.dataset.field;
+    const ex    = sched.exercises[ei];
+    if (!ex) return;
+    if (!entry[ex.name])     entry[ex.name] = [];
+    if (!entry[ex.name][si]) entry[ex.name][si] = {};
+    entry[ex.name][si][field] = inp.value;
+  });
+
+  state.data[todayKey] = entry;
+  saveData(state.data);
+  updateProgress();
+}
+
+function toggleCheck(exName) {
+  const todayKey = dateKey(state.today);
+  const checked  = loadChecked();
+  if (!checked[todayKey]) checked[todayKey] = {};
+  checked[todayKey][exName] = !checked[todayKey][exName];
+  saveChecked(checked);
+  const card = document.querySelector(`.ex-card[data-ex-name="${CSS.escape(exName)}"]`);
+  if (card) card.classList.toggle('done', !!checked[todayKey][exName]);
+  updateProgress();
+}
+
+function updateProgress() {
+  const todayKey = dateKey(state.today);
+  const dow      = state.today.getDay();
+  const sched    = SCHEDULE[dow];
+  if (!sched.exercises.length) return;
+  const checked  = loadChecked();
+  const done     = sched.exercises.filter(ex => checked[todayKey] && checked[todayKey][ex.name]).length;
+  const total    = sched.exercises.length;
+  const pct      = Math.round((done/total)*100);
+  const prog     = document.getElementById('hero-progress');
+  if (prog) {
+    prog.style.display = 'block';
+    document.getElementById('hero-prog-fill').style.width = pct + '%';
+    document.getElementById('hero-prog-label').textContent =
+      done === total ? '✓ All done!' : `${done} of ${total} complete`;
+  }
+}
+
+// ═══════════════════════════════════════════
+// CALENDAR
+// ═══════════════════════════════════════════
+let calViewYear, calViewMonth;
+
+function renderCalendar() {
+  const now = state.calMonth;
+  calViewYear  = now.getFullYear();
+  calViewMonth = now.getMonth();
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('cal-month-label').textContent = `${MONTHS[calViewMonth]} ${calViewYear}`;
+
+  const grid   = document.getElementById('cal-grid');
+  const headers= ['Su','Mo','Tu','We','Th','Fr','Sa'];
+  let html = headers.map(h => `<div class="cal-day-header">${h}</div>`).join('');
+
+  const first       = new Date(calViewYear, calViewMonth, 1).getDay();
+  const daysInMonth = new Date(calViewYear, calViewMonth+1, 0).getDate();
+  const todayD      = dateKey(state.today);
+
+  for (let i=0; i<first; i++) html += `<div class="cal-cell empty"></div>`;
+  for (let d=1; d<=daysInMonth; d++) {
+    const date  = new Date(calViewYear, calViewMonth, d);
+    const key   = dateKey(date);
+    const isToday    = key === todayD;
+    const isFuture   = date > state.today;
+    const isSelected = state.calSelected === key;
+    const hasLog     = !!state.data[key];
+    let cls = 'cal-cell';
+    if (isToday)    cls += ' today';
+    if (isFuture)   cls += ' future';
+    if (isSelected) cls += ' selected';
+    html += `<div class="${cls}" onclick="selectCalDay('${key}',${isFuture})">
+      <span class="cal-num">${d}</span>
+      ${hasLog ? '<div class="cal-dot"></div>' : ''}
+    </div>`;
+  }
+  grid.innerHTML = html;
+
+  if (state.calSelected) {
+    const selDate = new Date(state.calSelected + 'T12:00:00');
+    renderCalDetail(state.calSelected, selDate.getDay(), selDate > state.today);
+  }
+}
+
+function selectCalDay(key, isFuture) {
+  state.calSelected = key;
+  renderCalendar();
+  renderCalDetail(key, new Date(key+'T12:00:00').getDay(), isFuture);
+}
+
+function renderCalDetail(key, dow, isFuture) {
+  const panel  = document.getElementById('cal-detail-panel');
+  const sched  = SCHEDULE[dow];
+  const DAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const logged = state.data[key];
+
+  let html = `<div class="cal-detail">
+    <h3>${DAYS[dow]}</h3>
+    <span class="cal-tag">${sched.name} — ${sched.category}</span>`;
+
+  if (!sched.exercises.length) {
+    html += `<div class="empty-state">Rest day 🌿</div></div>`;
+    panel.innerHTML = html; return;
+  }
+
+  html += sched.exercises.map(ex => {
+    let actual = '—';
+    if (logged && logged[ex.name]) {
+      const sets = logged[ex.name];
+      const maxW = Math.max(...sets.map(s => parseFloat(s.weight)||0));
+      const maxR = Math.max(...sets.map(s => parseInt(s.reps)||0));
+      if (maxW > 0) actual = `${maxW} lbs × ${maxR}`;
+    }
+    const proj = (!logged || actual === '—') ? getProjection(ex.name, dow, key) : null;
+    return `<div class="lift-row">
+      <div class="lift-name">${ex.name}</div>
+      <div style="text-align:right">
+        <div class="lift-val">${actual}</div>
+        ${proj ? `<div class="lift-proj">${proj.ready ? '↑ ' : '→ '}${proj.weight} lbs</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  html += '</div>';
+  panel.innerHTML = html;
+}
+
+document.getElementById('prev-month').addEventListener('click', () => {
+  state.calMonth = new Date(calViewYear, calViewMonth-1, 1); renderCalendar();
+});
+document.getElementById('next-month').addEventListener('click', () => {
+  state.calMonth = new Date(calViewYear, calViewMonth+1, 1); renderCalendar();
+});
+
+// ═══════════════════════════════════════════
+// SETTINGS — auto-save
+// ═══════════════════════════════════════════
+function renderSettings() {
+  const s = state.settings;
+  document.getElementById('notif-time').value = s.notifTime || '08:00';
+  const tog = document.getElementById('notif-toggle');
+  tog.classList.toggle('on', !!s.notifEnabled);
+  updateNotifStatus();
+  renderStats();
+}
+
+// Auto-save time input
+document.getElementById('notif-time').addEventListener('change', () => {
+  state.settings.notifTime = document.getElementById('notif-time').value;
+  saveSettings(state.settings);
+  scheduleNotification();
+  showToast('Reminder time saved');
+});
+
+function renderStats() {
+  const keys = Object.keys(state.data).sort();
+  document.getElementById('stat-total').textContent = keys.length;
+  let streak = 0;
+  const d = new Date(state.today);
+  while (true) {
+    if (state.data[dateKey(d)]) { streak++; d.setDate(d.getDate()-1); } else break;
+  }
+  document.getElementById('stat-streak').textContent = streak;
+  const startOfWeek = new Date(state.today);
+  startOfWeek.setDate(state.today.getDate() - state.today.getDay());
+  let wc = 0;
+  for (let i=0;i<7;i++) {
+    const dd = new Date(startOfWeek); dd.setDate(startOfWeek.getDate()+i);
+    if (state.data[dateKey(dd)]) wc++;
+  }
+  document.getElementById('stat-week').textContent = wc;
+}
+
+function updateNotifStatus() {
+  const el = document.getElementById('notif-status');
+  if (!('Notification' in window)) {
+    el.textContent = 'Notifications not supported'; el.className = 'notif-status denied'; return;
+  }
+  if (Notification.permission === 'granted') {
+    el.textContent = '✓ Notifications enabled'; el.className = 'notif-status';
+  } else if (Notification.permission === 'denied') {
+    el.textContent = 'Blocked — enable in phone Settings'; el.className = 'notif-status denied';
+  } else {
+    el.textContent = 'Tap toggle to enable'; el.className = 'notif-status';
+  }
+}
+
+document.getElementById('notif-toggle').addEventListener('click', async () => {
+  const tog = document.getElementById('notif-toggle');
+  if (!('Notification' in window)) return;
+  if (Notification.permission !== 'granted') {
+    const perm = await Notification.requestPermission();
+    state.settings.notifEnabled = perm === 'granted';
+    tog.classList.toggle('on', perm === 'granted');
+  } else {
+    const on = tog.classList.toggle('on');
+    state.settings.notifEnabled = on;
+  }
+  saveSettings(state.settings);
+  scheduleNotification();
+  updateNotifStatus();
+});
+
+// ═══════════════════════════════════════════
+// NOTIFICATIONS
+// ═══════════════════════════════════════════
+function scheduleNotification() {
+  if (!state.settings.notifEnabled || Notification.permission !== 'granted') return;
+  checkAndFireNotif();
+}
+function checkAndFireNotif() {
+  if (!state.settings.notifTime) return;
+  const [h,m] = state.settings.notifTime.split(':').map(Number);
+  const now = new Date(); const target = new Date();
+  target.setHours(h,m,0,0);
+  if (target <= now) target.setDate(target.getDate()+1);
+  clearTimeout(window._notifTimer);
+  window._notifTimer = setTimeout(() => {
+    fireNotif();
+    setTimeout(checkAndFireNotif, 1000);
+  }, target - now);
+}
+function fireNotif() {
+  if (Notification.permission !== 'granted') return;
+  const dow   = new Date().getDay();
+  const sched = SCHEDULE[dow];
+  const exList= sched.exercises.slice(0,3).map(e=>e.name).join(', ');
+  new Notification(`Lift Tracker — ${sched.name} Day`, {
+    body: exList ? `Today: ${exList}${sched.exercises.length>3?'…':''}` : sched.category,
+    tag: 'lt-daily',
+  });
+}
+
+// ═══════════════════════════════════════════
+// CLEAR DATA
+// ═══════════════════════════════════════════
+function clearData() {
+  if (!confirm('Clear all workout data? This cannot be undone.')) return;
+  ['lt_data','lt_checked'].forEach(k => localStorage.removeItem(k));
+  state.data = {};
+  renderToday();
+  renderStats();
+  showToast('Data cleared');
+}
+
+// ═══════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ═══════════════════════════════════════════
+// SERVICE WORKER
+// ═══════════════════════════════════════════
+if ('serviceWorker' in navigator) {
+  const sw = `self.addEventListener('install',()=>self.skipWaiting());self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));`;
+  navigator.serviceWorker.register(
+    URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))
+  ).catch(()=>{});
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+renderToday();
+if (state.settings.notifEnabled) scheduleNotification();
+</script>
+
+</body>
+</html>
