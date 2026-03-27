@@ -864,6 +864,13 @@ nav {
           <div class="settings-label">Clear All Data</div>
           <button onclick="clearData()" style="background:none;border:1px solid rgba(192,80,80,.3);border-radius:8px;padding:6px 12px;color:#c05050;font-size:12px;font-family:var(--font-body);cursor:pointer;">Reset</button>
         </div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-label">Back Up Data</div>
+            <div class="settings-sub">Download a copy to keep your logs safe</div>
+          </div>
+          <button onclick="exportData()" style="background:none;border:1px solid rgba(107,94,82,.3);border-radius:8px;padding:6px 12px;color:var(--text-2);font-size:12px;font-family:var(--font-body);cursor:pointer;">Export</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1079,10 +1086,27 @@ const KB_WEIGHTS    = [9,13,18,26,35,44,53,62,70];  // standard KB sizes in lbs 
 const UPPER_JUMP = 2.5;
 const LOWER_JUMP = 5;
 
-// Exercises that use kettlebells — snap to KB sizes
+// Exercises that use NO external load — reps only, no weight field
+const BODYWEIGHT_EXERCISES = new Set([
+  'Deficit Push-Ups',
+  'Depth Drops → Vertical Jump',
+  'Single-Leg Bench Jumps',
+  'Pogo Jumps',
+  'Max Approach Jumps',
+  'Bounds',
+  'Band-Resisted Jumps',
+  'Band Triceps Pushdowns',
+  'Band Face Pulls',
+]);
+
+// Exercises that use kettlebells — snap to KB weight sizes
 const KB_EXERCISES = new Set([
-  'Kettlebell Swings','Single-Arm KB Overhead Press','KB Gorilla Rows',
-  'Suitcase Carry (KB)','Farmer Carry (KB)','Heavy Goblet Squats'
+  'Kettlebell Swings',
+  'Single-Arm KB Overhead Press',
+  'KB Gorilla Rows',
+  'Suitcase Carry (KB)',
+  'Farmer Carry (KB)',
+  'Heavy Goblet Squats',
 ]);
 
 function getWeightList(exName, bodyPart) {
@@ -1206,6 +1230,8 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
 // TODAY
 // ═══════════════════════════════════════════
 function renderToday() {
+  // Always pull fresh from storage
+  state.data = loadData();
   // Clear any old warm-up block
   const old = document.getElementById('warmup-block');
   if (old) old.remove();
@@ -1280,17 +1306,20 @@ function renderToday() {
     // Build set rows for log section
     const numSets = ex.sets;
     const existingSets = logEntry && logEntry[ex.name] ? logEntry[ex.name] : [];
-    let setRowsHTML = `<div class="log-headers">
+    const isBodyweight = BODYWEIGHT_EXERCISES.has(ex.name);
+    const gridCols = isBodyweight ? '28px 1fr' : '28px 1fr 1fr';
+
+    let setRowsHTML = `<div class="log-headers" style="grid-template-columns:${gridCols}">
       <div></div>
-      <div class="set-input-header">Weight (lbs)</div>
+      ${isBodyweight ? '' : '<div class="set-input-header">Weight (lbs)</div>'}
       <div class="set-input-header">Reps</div>
     </div>`;
     for (let si = 0; si < numSets; si++) {
       const existing = existingSets[si] || {};
-      setRowsHTML += `<div class="log-set-row">
+      setRowsHTML += `<div class="log-set-row" style="grid-template-columns:${gridCols}">
         <div class="set-label">S${si+1}</div>
-        <div><input class="set-input" type="number" inputmode="decimal" placeholder="lbs"
-          data-ex="${i}" data-set="${si}" data-field="weight" value="${existing.weight||''}"/></div>
+        ${isBodyweight ? '' : `<div><input class="set-input" type="number" inputmode="decimal" placeholder="lbs"
+          data-ex="${i}" data-set="${si}" data-field="weight" value="${existing.weight||''}"/></div>`}
         <div><input class="set-input" type="number" inputmode="numeric" placeholder="${ex.reps||'—'}"
           data-ex="${i}" data-set="${si}" data-field="reps" value="${existing.reps||''}"/></div>
       </div>`;
@@ -1317,11 +1346,13 @@ function renderToday() {
         </div>
         <div class="ex-right">
           <div class="ex-last-weight">
-            ${todayW
-              ? `<strong>${todayW} lbs</strong><span>today</span>`
-              : lastW
-                ? `<strong>${lastW} lbs</strong><span>last time</span>`
-                : `<strong>—</strong>`}
+            ${BODYWEIGHT_EXERCISES.has(ex.name)
+              ? (todayW || lastW ? `<strong>✓ Done</strong><span>logged</span>` : `<strong>—</strong>`)
+              : todayW
+                ? `<strong>${todayW} lbs</strong><span>today</span>`
+                : lastW
+                  ? `<strong>${lastW} lbs</strong><span>last time</span>`
+                  : `<strong>—</strong>`}
           </div>
           <div class="ex-check" onclick="event.stopPropagation(); toggleCheck('${ex.name.replace(/'/g,"\\'")}')">
             <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -1367,12 +1398,17 @@ function toggleExpand(i) {
 function addSet(ei, defaultReps) {
   const container = document.getElementById(`sets-container-${ei}`);
   const existing  = container.querySelectorAll('.log-set-row').length;
+  const dow       = state.today.getDay();
+  const ex        = SCHEDULE[dow].exercises[ei];
+  const isBodyweight = ex && BODYWEIGHT_EXERCISES.has(ex.name);
+  const gridCols  = isBodyweight ? '28px 1fr' : '28px 1fr 1fr';
   const row = document.createElement('div');
   row.className = 'log-set-row';
+  row.style.gridTemplateColumns = gridCols;
   row.innerHTML = `
     <div class="set-label">S${existing+1}</div>
-    <div><input class="set-input" type="number" inputmode="decimal" placeholder="lbs"
-      data-ex="${ei}" data-set="${existing}" data-field="weight"/></div>
+    ${isBodyweight ? '' : `<div><input class="set-input" type="number" inputmode="decimal" placeholder="lbs"
+      data-ex="${ei}" data-set="${existing}" data-field="weight"/></div>`}
     <div><input class="set-input" type="number" inputmode="numeric" placeholder="${defaultReps||'—'}"
       data-ex="${ei}" data-set="${existing}" data-field="reps"/></div>`;
   container.appendChild(row);
@@ -1385,7 +1421,9 @@ function autoSaveLog() {
   const dow   = state.today.getDay();
   const sched = SCHEDULE[dow];
   const todayKey = dateKey(state.today);
-  const entry = state.data[todayKey] || {};
+  // Always start from the stored data so we don't lose other days
+  const allData = loadData();
+  const entry = allData[todayKey] || {};
 
   document.querySelectorAll('.set-input').forEach(inp => {
     const ei    = parseInt(inp.dataset.ex);
@@ -1398,8 +1436,9 @@ function autoSaveLog() {
     entry[ex.name][si][field] = inp.value;
   });
 
-  state.data[todayKey] = entry;
-  saveData(state.data);
+  allData[todayKey] = entry;
+  state.data = allData;        // keep state in sync
+  saveData(allData);
   updateProgress();
 }
 
@@ -1438,6 +1477,8 @@ function updateProgress() {
 let calViewYear, calViewMonth;
 
 function renderCalendar() {
+  // Always pull fresh from storage so past logs are never missing
+  state.data = loadData();
   const now = state.calMonth;
   calViewYear  = now.getFullYear();
   calViewMonth = now.getMonth();
@@ -1501,12 +1542,19 @@ function renderCalDetail(key, dow, isFuture) {
   html += sched.exercises.map(ex => {
     let actual = '—';
     if (logged && logged[ex.name]) {
-      const sets = logged[ex.name];
-      const maxW = Math.max(...sets.map(s => parseFloat(s.weight)||0));
-      const maxR = Math.max(...sets.map(s => parseInt(s.reps)||0));
-      if (maxW > 0) actual = `${maxW} lbs × ${maxR}`;
+      const sets = logged[ex.name].filter(s => s && (s.reps || s.weight));
+      if (sets.length > 0) {
+        const maxW = Math.max(...sets.map(s => parseFloat(s.weight)||0));
+        const maxR = Math.max(...sets.map(s => parseInt(s.reps)||0));
+        const isBodyweight = BODYWEIGHT_EXERCISES.has(ex.name);
+        if (isBodyweight) {
+          actual = maxR > 0 ? `${sets.length} sets × ${maxR} reps` : `${sets.length} sets logged`;
+        } else {
+          actual = maxW > 0 ? `${maxW} lbs × ${maxR} reps` : maxR > 0 ? `${maxR} reps` : `${sets.length} sets logged`;
+        }
+      }
     }
-    const proj = (!logged || actual === '—') ? getProjection(ex.name, dow, key) : null;
+    const proj = (actual === '—') ? getProjection(ex.name, dow, key) : null;
     return `<div class="lift-row">
       <div class="lift-name">${ex.name}</div>
       <div style="text-align:right">
@@ -1629,6 +1677,23 @@ function fireNotif() {
 // ═══════════════════════════════════════════
 // CLEAR DATA
 // ═══════════════════════════════════════════
+function exportData() {
+  const payload = {
+    exported: new Date().toISOString(),
+    data:     state.data,
+    checked:  loadChecked(),
+    settings: state.settings,
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = `lift-tracker-backup-${dateKey(new Date())}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Backup downloaded');
+}
+
 function clearData() {
   if (!confirm('Clear all workout data? This cannot be undone.')) return;
   ['lt_data','lt_checked'].forEach(k => localStorage.removeItem(k));
